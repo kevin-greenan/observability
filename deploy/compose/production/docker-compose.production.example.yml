@@ -1,0 +1,45 @@
+# Production-pilot override for single-host Docker Compose.
+#
+# This keeps backend APIs private, enables the TLS edge profile, and moves lab
+# generators behind an explicit profile so they are not started accidentally.
+
+x-production-logging: &production-logging
+  driver: json-file
+  options:
+    max-size: "50m"
+    max-file: "5"
+
+services:
+  grafana:
+    logging: *production-logging
+
+  loki:
+    logging: *production-logging
+
+  tempo:
+    logging: *production-logging
+
+  mimir:
+    logging: *production-logging
+
+  prometheus:
+    logging: *production-logging
+
+  alloy:
+    logging: *production-logging
+
+  siem-collector:
+    logging: *production-logging
+
+  edge-proxy:
+    profiles:
+      - edge
+    logging: *production-logging
+
+  log-generator:
+    profiles:
+      - lab-generators
+
+  trace-generator:
+    profiles:
+      - lab-generators
