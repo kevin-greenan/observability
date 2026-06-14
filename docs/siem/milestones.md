@@ -299,6 +299,7 @@ Candidate implementation:
 - Add `services/admin-api/` with a FastAPI service.
 - Add `docs/siem/admin-api.md`.
 - Add OpenAPI schema generation and Swagger UI.
+- Generate or maintain an API client suitable for automation tooling, including the Terraform provider.
 - Add typed resource models for sources, lookups, detections, alert routes, integrations, cases, and platform settings.
 - Add adapters for Grafana, Loki ruler files, Vector configuration/lookups, deployment configuration, and future case-management APIs.
 - Add dry-run validation that calls existing repository checks before applying changes.
@@ -323,7 +324,61 @@ Exit criteria:
 - API contract tests run in validation.
 - Documentation explains supported resources, unsupported operations, rollback behavior, and native component API boundaries.
 
-## Milestone 9: Detection Engineering at Production Scale
+## Milestone 9: Terraform Provider
+
+Status: `planned`
+
+Goal: Provide a Terraform provider that manages SIEM platform resources through the consolidated administrative API.
+
+Why this matters:
+
+Production administrators should be able to manage repeatable SIEM configuration through infrastructure as code. The provider should not talk directly to Grafana, Loki, Vector, or other stack components. It should use the consolidated API as the supported control plane so validation, authorization, audit logging, and rollback semantics stay consistent.
+
+Scope:
+
+- Terraform provider implemented with the modern Terraform Plugin Framework.
+- Provider authentication against the consolidated administrative API.
+- Resources and data sources for supported SIEM objects.
+- Import support for existing platform configuration where safe.
+- Plan-time validation using API dry-run endpoints.
+- Drift detection against API-managed state.
+- Acceptance tests against a local stack or test admin API.
+- Provider documentation and examples.
+
+Candidate implementation:
+
+- Add `terraform-provider-observability/` or `providers/terraform/`.
+- Add `docs/siem/terraform-provider.md`.
+- Add provider resources for initial API-backed objects:
+  - `observability_siem_source`
+  - `observability_siem_lookup`
+  - `observability_detection_rule`
+  - `observability_alert_route`
+  - `observability_integration`
+  - `observability_case_workflow`
+- Add data sources for existing sources, detections, integrations, and platform capabilities.
+- Add example Terraform modules under `examples/terraform/`.
+- Add `make terraform-provider-test` for unit, schema, and acceptance-test entry points.
+- Add release and versioning guidance for provider binaries.
+
+Open decisions:
+
+- Which resources are safe to manage declaratively in the first provider release.
+- Whether the provider supports live apply only, Git-backed change requests only, or both through API modes.
+- How Terraform state should handle sensitive values, external ticket IDs, and generated tokens.
+- Whether provider releases are published to the Terraform Registry or distributed internally.
+
+Exit criteria:
+
+- Provider can configure at least one end-to-end resource through the admin API, such as a SIEM source or alert route.
+- Provider schema is documented.
+- Provider uses admin API authentication and does not bypass the consolidated API.
+- Plan/apply behavior uses API validation and returns actionable errors.
+- Sensitive values are marked and documented.
+- Tests run through a local validation command.
+- Example Terraform configuration exists for a realistic SOC onboarding workflow.
+
+## Milestone 10: Detection Engineering at Production Scale
 
 Status: `planned`
 
@@ -358,7 +413,7 @@ Exit criteria:
 - Detection tests run automatically.
 - Alert quality is measured and reviewed.
 
-## Milestone 10: Data Source Coverage and Ingest Governance
+## Milestone 11: Data Source Coverage and Ingest Governance
 
 Status: `planned`
 
@@ -393,7 +448,7 @@ Exit criteria:
 - Onboarding approval workflow is documented.
 - Source health is visible to analysts and platform owners.
 
-## Milestone 11: Compliance, Privacy, and Data Governance
+## Milestone 12: Compliance, Privacy, and Data Governance
 
 Status: `planned`
 
@@ -427,7 +482,7 @@ Exit criteria:
 - Evidence export and legal hold procedures exist.
 - Retention is technically enforced or tracked as an explicit external control.
 
-## Milestone 12: Production Auditability and Administrative Audit Logs
+## Milestone 13: Production Auditability and Administrative Audit Logs
 
 Status: `planned`
 
@@ -442,7 +497,7 @@ Scope:
 - Grafana Enterprise/Cloud audit log decision or equivalent external audit strategy.
 - Case-management audit logs.
 - Integration configuration and delivery audit logs.
-- Administrative API audit logs.
+- Administrative API and Terraform provider audit logs.
 - Rule and dashboard changes through Git.
 - Lookup update records.
 - Source onboarding approvals.
@@ -453,7 +508,7 @@ Candidate implementation:
 
 - Extend `docs/siem/auditability.md`.
 - Add audit log collection for Grafana and the case system.
-- Add audit coverage for integration credential changes, routing changes, administrative API actions, and failed delivery handling.
+- Add audit coverage for integration credential changes, routing changes, administrative API actions, Terraform-managed changes, and failed delivery handling.
 - Add dashboards or queries for administrative activity.
 - Add audit evidence retention requirements.
 
@@ -461,11 +516,11 @@ Exit criteria:
 
 - Administrative audit source is selected and onboarded.
 - Case-management actions are auditable.
-- Integration routing, administrative API actions, and delivery changes are auditable.
+- Integration routing, administrative API actions, Terraform-managed changes, and delivery changes are auditable.
 - Change evidence is retained.
 - Access and token events can be reviewed.
 
-## Milestone 13: CI/CD, Release Management, and Change Gates
+## Milestone 14: CI/CD, Release Management, and Change Gates
 
 Status: `planned`
 
@@ -481,6 +536,7 @@ Scope:
 - Optional integration test environment.
 - Image pin review.
 - Dependency and container vulnerability scanning.
+- Terraform provider test and release workflow.
 - Release notes and rollback plan.
 - Approval gates for production deployment.
 
@@ -491,6 +547,7 @@ Candidate implementation:
 - Add container image scanning.
 - Add PR labels or templates for release risk.
 - Add release checklist.
+- Add Terraform provider release workflow and compatibility checks.
 
 Exit criteria:
 
@@ -498,8 +555,9 @@ Exit criteria:
 - Release process is documented.
 - Production promotion has approvals and rollback steps.
 - Dependency and image risk is visible.
+- Terraform provider changes are tested and versioned.
 
-## Milestone 14: Disaster Recovery and Business Continuity
+## Milestone 15: Disaster Recovery and Business Continuity
 
 Status: `planned`
 
@@ -512,7 +570,7 @@ Security operations must continue during incidents, outages, and failed upgrades
 Scope:
 
 - Recovery time objective and recovery point objective.
-- Restore drills for logs, metrics, traces, dashboards, detections, lookups, administrative API state, and cases.
+- Restore drills for logs, metrics, traces, dashboards, detections, lookups, administrative API state, Terraform-managed state assumptions, and cases.
 - Backup integrity checks.
 - Alternate access path during Grafana or case-system outage.
 - Communications plan for SIEM degradation.
@@ -531,7 +589,7 @@ Exit criteria:
 - Backups are monitored.
 - Case data is included in DR testing.
 
-## Milestone 15: Analyst Experience and Investigation Workflow
+## Milestone 16: Analyst Experience and Investigation Workflow
 
 Status: `planned`
 
@@ -573,12 +631,13 @@ Exit criteria:
 5. On-platform case and incident management.
 6. SOC tool integrations.
 7. Consolidated administrative API.
-8. Data source coverage and ingest governance.
-9. Detection engineering at production scale.
-10. Production auditability and administrative audit logs.
-11. CI/CD, release management, and change gates.
-12. Disaster recovery and business continuity.
-13. Compliance, privacy, and data governance.
-14. Analyst experience and investigation workflow.
+8. Terraform provider.
+9. Data source coverage and ingest governance.
+10. Detection engineering at production scale.
+11. Production auditability and administrative audit logs.
+12. CI/CD, release management, and change gates.
+13. Disaster recovery and business continuity.
+14. Compliance, privacy, and data governance.
+15. Analyst experience and investigation workflow.
 
-The order intentionally puts runtime, identity, secrets, and storage before deep analyst workflow work. Case management, SOC tool integrations, and the consolidated administrative API are early because they become the system of record, handoff paths, and control plane for response work, and must be included in backup, RBAC, audit, notification, and operational monitoring decisions.
+The order intentionally puts runtime, identity, secrets, and storage before deep analyst workflow work. Case management, SOC tool integrations, the consolidated administrative API, and the Terraform provider are early because they become the system of record, handoff paths, control plane, and infrastructure-as-code interface for response work, and must be included in backup, RBAC, audit, notification, and operational monitoring decisions.
