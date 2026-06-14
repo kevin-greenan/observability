@@ -1,6 +1,6 @@
 services:
   grafana:
-    image: grafana/grafana:${GRAFANA_VERSION:-latest}
+    image: ${GRAFANA_IMAGE:-grafana/grafana:latest}
     container_name: lgtm-grafana
     restart: unless-stopped
     environment:
@@ -22,7 +22,7 @@ services:
       - observability
 
   loki:
-    image: grafana/loki:${LOKI_VERSION:-latest}
+    image: ${LOKI_IMAGE:-grafana/loki:latest}
     container_name: lgtm-loki
     restart: unless-stopped
     command:
@@ -37,7 +37,7 @@ services:
       - observability
 
   tempo:
-    image: grafana/tempo:${TEMPO_VERSION:-latest}
+    image: ${TEMPO_IMAGE:-grafana/tempo:latest}
     container_name: lgtm-tempo
     restart: unless-stopped
     command:
@@ -53,7 +53,7 @@ services:
       - observability
 
   mimir:
-    image: grafana/mimir:${MIMIR_VERSION:-latest}
+    image: ${MIMIR_IMAGE:-grafana/mimir:latest}
     container_name: lgtm-mimir
     restart: unless-stopped
     command:
@@ -67,7 +67,7 @@ services:
       - observability
 
   prometheus:
-    image: prom/prometheus:${PROMETHEUS_VERSION:-latest}
+    image: ${PROMETHEUS_IMAGE:-prom/prometheus:latest}
     container_name: lgtm-prometheus
     restart: unless-stopped
     command:
@@ -85,7 +85,7 @@ services:
       - observability
 
   alloy:
-    image: grafana/alloy:${ALLOY_VERSION:-latest}
+    image: ${ALLOY_IMAGE:-grafana/alloy:latest}
     container_name: lgtm-alloy
     restart: unless-stopped
     command:
@@ -106,7 +106,7 @@ services:
       - observability
 
   siem-collector:
-    image: timberio/vector:${VECTOR_VERSION:-0.49.0-debian}
+    image: ${VECTOR_IMAGE:-timberio/vector:0.49.0-debian}
     container_name: lgtm-siem-collector
     restart: unless-stopped
     command:
@@ -131,7 +131,7 @@ services:
       - observability
 
   edge-proxy:
-    image: caddy:${CADDY_VERSION:-2-alpine}
+    image: ${CADDY_IMAGE:-caddy:2-alpine}
     container_name: lgtm-edge-proxy
     restart: unless-stopped
     profiles:
@@ -149,7 +149,7 @@ services:
       - observability
 
   log-generator:
-    image: busybox:${BUSYBOX_VERSION:-latest}
+    image: ${BUSYBOX_IMAGE:-busybox:latest}
     container_name: lgtm-log-generator
     restart: unless-stopped
     command:
@@ -164,7 +164,7 @@ services:
       - observability
 
   trace-generator:
-    image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:${TELEMETRYGEN_VERSION:-latest}
+    image: ${TELEMETRYGEN_IMAGE:-ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:latest}
     container_name: lgtm-trace-generator
     restart: unless-stopped
     command:

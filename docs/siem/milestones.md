@@ -479,7 +479,7 @@ The `codex/siem-production-deployment-target` branch satisfies this milestone by
 
 ## Milestone 9: Upgrade, Release, and Change Management
 
-Status: `planned`
+Status: `done`
 
 Goal: Make stack upgrades and configuration changes safe.
 
@@ -521,6 +521,10 @@ Exit criteria:
 - Upgrade procedure exists.
 - Rollback procedure exists.
 - Validation command covers all major config types.
+
+Completion note:
+
+The `codex/siem-upgrade-release-management` branch satisfies this milestone by adding production image digest pins, full-image Compose references, `docs/siem/upgrades.md`, `make validate-all`, static compatibility checks, live validation mode, and documented upgrade and rollback procedures.
 
 ## Milestone 10: Capacity and Load Testing
 

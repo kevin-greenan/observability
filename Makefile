@@ -1,4 +1,4 @@
-.PHONY: up down restart logs ps validate siem-smoke-test detection-test alert-routing-test security-boundary-test identity-secrets-test restore-test production-deployment-test clean
+.PHONY: up down restart logs ps validate validate-all siem-smoke-test detection-test alert-routing-test security-boundary-test identity-secrets-test restore-test production-deployment-test clean
 
 COMPOSE ?= docker compose
 
@@ -19,6 +19,9 @@ ps:
 
 validate:
 	./scripts/validate.sh
+
+validate-all:
+	./scripts/validate-all.sh
 
 siem-smoke-test:
 	./scripts/siem-smoke-test.sh
