@@ -36,6 +36,17 @@ Candidate implementation:
 - Add environment diagrams for ingest, query, storage, and admin paths.
 - Add validation for production manifests.
 
+Tasks:
+
+- Task: Select and document the production runtime target.
+  Success criteria: `docs/siem/ha-architecture.md` names the selected target, explains rejected alternatives, defines ownership, and is linked from production architecture docs.
+- Task: Define production network and failure-domain architecture.
+  Success criteria: Documentation includes ingest, query, admin, storage, and integration paths plus availability zones, node placement, trust boundaries, and failover assumptions.
+- Task: Add production deployment manifests or operator procedures.
+  Success criteria: Repository contains deployable examples or step-by-step procedures for the selected runtime target, including upgrade and rollback commands.
+- Task: Add production runtime validation.
+  Success criteria: `make validate-all` or a dedicated validation target checks the production manifests/procedures for required files, private backend bindings, TLS ingress, and disabled lab-only services.
+
 Exit criteria:
 
 - Runtime target is explicitly selected.
@@ -68,6 +79,19 @@ Candidate implementation:
 - Add production storage configuration examples.
 - Add scheduled backup documentation for every stateful service.
 - Add restore drill evidence requirements.
+
+Tasks:
+
+- Task: Select durable storage backends for Loki, Mimir, Tempo, Grafana, and case data.
+  Success criteria: Storage documentation names the backend for each stateful component, defines ownership, and explains durability and availability expectations.
+- Task: Map retention policy to technical configuration.
+  Success criteria: Each log/data class has documented retention, storage location, enforcement mechanism, and exception process.
+- Task: Add production storage configuration examples.
+  Success criteria: Example configuration exists for object storage or durable databases, with placeholders for secrets and environment-specific values.
+- Task: Expand backup and restore coverage.
+  Success criteria: Restore procedures cover logs, dashboards, detections, lookups, admin API state, Terraform-managed assumptions, and case data.
+- Task: Define legal hold and investigation preservation.
+  Success criteria: Documentation explains how to preserve event data and case evidence without violating normal retention or privacy controls.
 
 Exit criteria:
 
@@ -102,6 +126,19 @@ Candidate implementation:
 - Add access review checklist.
 - Add RBAC validation procedure.
 
+Tasks:
+
+- Task: Define production roles and permissions.
+  Success criteria: Roles for platform admin, security admin, detection engineer, analyst, responder, auditor, and break-glass admin are documented with allowed actions.
+- Task: Document SSO integration.
+  Success criteria: Identity documentation includes required IdP metadata, group claims, environment variables, secret references, and login validation steps.
+- Task: Map identity groups to platform roles.
+  Success criteria: Group-to-role mapping exists for Grafana, case management, admin API, Terraform provider access, and integration administration.
+- Task: Define access review and offboarding process.
+  Success criteria: Documentation includes review cadence, evidence requirements, temporary access expiration, and emergency revocation steps.
+- Task: Add RBAC validation procedure.
+  Success criteria: A repeatable manual or automated test verifies representative users can and cannot perform expected actions.
+
 Exit criteria:
 
 - SSO path is documented and tested.
@@ -134,6 +171,19 @@ Candidate implementation:
 - Add deployment examples that reference managed secrets.
 - Add token rotation checklist and validation steps.
 - Add a secret age review process.
+
+Tasks:
+
+- Task: Select and document the production secret manager.
+  Success criteria: Secrets documentation names the secret manager, access model, audit source, and runtime injection pattern.
+- Task: Inventory production secret classes.
+  Success criteria: Documentation lists every secret class, including admin API credentials, HTTP ingest tokens, SSO secrets, integration webhooks, storage credentials, Terraform provider credentials, and case-system credentials.
+- Task: Add managed-secret deployment examples.
+  Success criteria: Production examples reference managed secrets without committing secret values or sensitive fragments.
+- Task: Define rotation workflows.
+  Success criteria: Each secret class has owner, rotation cadence, validation step, rollback step, and evidence location.
+- Task: Add secret age and access review.
+  Success criteria: Documentation defines how stale secrets and excessive secret access are detected and remediated.
 
 Exit criteria:
 
@@ -168,6 +218,19 @@ Candidate implementation:
 - Add Loki/Mimir/Grafana/Vector/incident-system alert rules.
 - Add runbooks for ingest down, storage full, query degraded, alert delivery failed, and case system unavailable.
 - Add SLO documentation and burn-rate alerts.
+
+Tasks:
+
+- Task: Define SIEM platform SLOs.
+  Success criteria: SLOs exist for ingest freshness, query latency, alert delivery, detection evaluation, case availability, and storage capacity.
+- Task: Add platform health dashboards.
+  Success criteria: Dashboards show service health, ingest throughput, freshness, query errors, alert delivery failures, case-system status, and storage utilization.
+- Task: Add platform health alerts.
+  Success criteria: Alerts exist for critical platform failure modes and route to platform owners through production contact points.
+- Task: Add operational runbooks.
+  Success criteria: Runbooks exist for ingest down, source stale, storage full, query degraded, alert delivery failed, admin API down, and case system unavailable.
+- Task: Validate monitoring content.
+  Success criteria: Dashboard JSON, alert rules, and runbook links are validated by `make validate-all` or a dedicated target.
 
 Exit criteria:
 
@@ -217,6 +280,21 @@ Open decisions:
 - Whether every alert creates a case or only analyst-promoted alerts do.
 - Whether external Jira/ServiceNow/PagerDuty records mirror every case or only escalated incidents.
 
+Tasks:
+
+- Task: Select case-management system of record.
+  Success criteria: `docs/siem/case-management.md` names the selected approach, explains alternatives, and defines whether external tools mirror or replace cases.
+- Task: Define case data model and lifecycle.
+  Success criteria: Case fields, statuses, severity model, assignment rules, timestamps, evidence fields, closure reasons, and audit events are documented.
+- Task: Implement alert-to-case workflow.
+  Success criteria: A test alert or fixture can create or link a case, preserve source alert context, and expose the case link to analysts.
+- Task: Implement case persistence and backup coverage.
+  Success criteria: Case data storage is durable and included in backup and restore documentation.
+- Task: Add case audit and evidence handling.
+  Success criteria: Case actions, notes, evidence links, external references, and closure changes are auditable and retained according to policy.
+- Task: Add case workflow validation.
+  Success criteria: A smoke test or documented drill covers create, assign, update, escalate, link external record, and close.
+
 Exit criteria:
 
 - Case-management system of record is selected.
@@ -263,6 +341,21 @@ Open decisions:
 - Whether Jira/ServiceNow creation should happen directly from alerts, from cases, or from analyst action.
 - Which external system is the incident system of record when an on-platform case also exists.
 - Whether integrations should be synchronous, queued, or retried through an intermediate worker.
+
+Tasks:
+
+- Task: Define integration architecture and supported patterns.
+  Success criteria: `docs/siem/integrations.md` explains notification, ticket creation, incident escalation, SOAR handoff, webhook, retry, and failure handling patterns.
+- Task: Add notification destination examples.
+  Success criteria: Slack, Teams, email, PagerDuty/Opsgenie, and generic webhook examples exist with required fields and secret references.
+- Task: Add Jira and ServiceNow ticket contracts.
+  Success criteria: Example payloads define summary, severity, source, rule ID, entities, runbook, case link, deduplication key, and external record ID handling.
+- Task: Define integration credential handling.
+  Success criteria: Integration credentials are documented as managed secrets with owners, rotation expectations, and audit evidence.
+- Task: Add integration contract validation.
+  Success criteria: `make integration-contract-test` or equivalent validates required payload fields and sample configurations.
+- Task: Add delivery health visibility.
+  Success criteria: Delivery failures, retries, dropped notifications, and downstream rate-limit events are visible in dashboards or logs.
 
 Exit criteria:
 
@@ -313,6 +406,23 @@ Open decisions:
 - Whether the API owns configuration state or acts as an orchestrator over Git and native component state.
 - How long to retain API audit records and where to store them.
 - Which resources are allowed in the first production version.
+
+Tasks:
+
+- Task: Define admin API resource model and boundaries.
+  Success criteria: `docs/siem/admin-api.md` lists supported resources, native component boundaries, unsupported operations, and whether each resource is Git-backed, live-applied, or both.
+- Task: Scaffold the admin API service.
+  Success criteria: `services/admin-api/` exposes health, version, OpenAPI schema, and Swagger UI through a documented local run command.
+- Task: Implement authentication and authorization.
+  Success criteria: API requests require authentication, enforce role-based scopes, and include tests for allowed and denied actions.
+- Task: Implement validate/apply/status/rollback workflow.
+  Success criteria: At least one resource supports dry-run validation, apply, operation status, and rollback reference.
+- Task: Add component adapters.
+  Success criteria: API code has clear adapters for Grafana, Loki rules, Vector configuration/lookups, deployment config, and future case-management APIs.
+- Task: Add API audit logging.
+  Success criteria: Every mutating request records actor, resource, request ID, validation result, outcome, and rollback reference.
+- Task: Add admin API tests and validation target.
+  Success criteria: `make admin-api-test` validates schema generation, auth checks, and one sample workflow.
 
 Exit criteria:
 
@@ -368,6 +478,23 @@ Open decisions:
 - How Terraform state should handle sensitive values, external ticket IDs, and generated tokens.
 - Whether provider releases are published to the Terraform Registry or distributed internally.
 
+Tasks:
+
+- Task: Scaffold Terraform provider project.
+  Success criteria: Provider source lives under the selected directory, builds locally, and uses the Terraform Plugin Framework.
+- Task: Implement provider authentication and client configuration.
+  Success criteria: Provider accepts admin API endpoint and credentials through documented environment variables or provider config, and never calls backend component APIs directly.
+- Task: Implement first managed resource.
+  Success criteria: One realistic resource, such as `observability_siem_source` or `observability_alert_route`, supports create, read, update, delete, import, and drift detection through the admin API.
+- Task: Add plan-time validation.
+  Success criteria: Provider calls admin API dry-run endpoints during planning or validation and returns actionable diagnostics.
+- Task: Add sensitive state handling.
+  Success criteria: Sensitive attributes are marked, examples avoid storing secrets in plain text, and documentation explains state security responsibilities.
+- Task: Add provider tests and examples.
+  Success criteria: `make terraform-provider-test` runs unit/schema tests and examples under `examples/terraform/` show a SOC onboarding workflow.
+- Task: Define provider release process.
+  Success criteria: Documentation covers versioning, changelog, compatibility with admin API versions, and internal or registry distribution.
+
 Exit criteria:
 
 - Provider can configure at least one end-to-end resource through the admin API, such as a SIEM source or alert route.
@@ -406,6 +533,19 @@ Candidate implementation:
 - Add dashboards for alert volume, false positives, and rule health.
 - Add template fields for detection quality metrics.
 
+Tasks:
+
+- Task: Build production detection coverage map.
+  Success criteria: Coverage documentation maps detections to ATT&CK or an internal threat model, identifies gaps, and assigns owners.
+- Task: Add detection quality metadata.
+  Success criteria: Production rules include owner, status, severity, category, runbook, review date, confidence, expected volume, and false-positive notes.
+- Task: Add CI-friendly detection tests.
+  Success criteria: Detection fixtures and tests can run in CI or a documented test environment without relying on stale local data.
+- Task: Add detection quality dashboards.
+  Success criteria: Dashboards show alert volume, noisy rules, false-positive indicators, rule health, and stale review dates.
+- Task: Define tuning and retirement workflow.
+  Success criteria: Documentation explains promotion, tuning, suppression, deprecation, rollback, and periodic review.
+
 Exit criteria:
 
 - Coverage map exists.
@@ -441,6 +581,19 @@ Candidate implementation:
 - Add onboarding and offboarding templates.
 - Add source quality dashboard panels.
 
+Tasks:
+
+- Task: Define required production source catalog.
+  Success criteria: Source inventory documentation lists required identity, endpoint, network, cloud, application, infrastructure, and case-management sources by tier.
+- Task: Add source onboarding workflow.
+  Success criteria: Onboarding template captures owner, criticality, expected volume, parser expectation, enrichment requirement, retention class, and approval evidence.
+- Task: Add source offboarding workflow.
+  Success criteria: Offboarding procedure checks detection impact, retention/legal hold, lookup cleanup, dashboards, alerts, and external integrations.
+- Task: Add critical source freshness monitoring.
+  Success criteria: Critical sources have freshness queries or alert rules with documented thresholds.
+- Task: Add source quality visibility.
+  Success criteria: Dashboards or reports show parse status, enrichment coverage, volume anomalies, stale sources, and unknown sources.
+
 Exit criteria:
 
 - Required source catalog exists.
@@ -474,6 +627,19 @@ Candidate implementation:
 - Add source classification fields to source inventory.
 - Document field masking patterns.
 - Add evidence export checklist.
+
+Tasks:
+
+- Task: Define data classification model.
+  Success criteria: Governance documentation defines classification levels, examples, owners, and required handling for each class.
+- Task: Extend source inventory for governance fields.
+  Success criteria: Source inventory supports retention class, sensitivity, regulatory scope, masking requirement, and evidence-export eligibility.
+- Task: Document masking and minimization patterns.
+  Success criteria: Documentation explains where masking happens, which fields are masked, and how raw preservation is handled for investigations.
+- Task: Define evidence export and legal hold procedures.
+  Success criteria: Procedures include request approval, export scope, integrity evidence, storage location, retention exception, and closure.
+- Task: Add access logging expectations for sensitive investigations.
+  Success criteria: Documentation identifies which audit sources prove who accessed sensitive data or case evidence.
 
 Exit criteria:
 
@@ -512,6 +678,19 @@ Candidate implementation:
 - Add dashboards or queries for administrative activity.
 - Add audit evidence retention requirements.
 
+Tasks:
+
+- Task: Select administrative audit sources.
+  Success criteria: Auditability documentation identifies audit logs for Grafana, case management, admin API, Terraform provider workflows, secret manager, identity provider, and integrations.
+- Task: Onboard audit logs into the SIEM.
+  Success criteria: Administrative audit sources are ingested, searchable, labeled, and covered by source inventory.
+- Task: Add audit dashboards and queries.
+  Success criteria: Dashboards or saved queries show rule changes, source changes, lookup changes, access changes, integration changes, admin API actions, and failed deliveries.
+- Task: Define audit evidence retention.
+  Success criteria: Retention and backup docs specify how long audit evidence is kept and how it is restored.
+- Task: Add audit validation.
+  Success criteria: A test or documented drill proves representative administrative actions are captured and searchable.
+
 Exit criteria:
 
 - Administrative audit source is selected and onboarded.
@@ -549,6 +728,19 @@ Candidate implementation:
 - Add release checklist.
 - Add Terraform provider release workflow and compatibility checks.
 
+Tasks:
+
+- Task: Add CI workflow for repository validation.
+  Success criteria: Pull requests run static validation, docs-structure test, YAML/JSON checks, and feasible Compose/config checks.
+- Task: Add security scanning.
+  Success criteria: Container images and dependencies are scanned, with documented severity thresholds and exception handling.
+- Task: Add release checklist and versioning.
+  Success criteria: Release docs include versioning, changelog, validation evidence, rollback plan, and approval requirements.
+- Task: Add deployment promotion gates.
+  Success criteria: Production promotion requires approval, validation evidence, owner signoff, and rollback instructions.
+- Task: Add Terraform provider release workflow.
+  Success criteria: Provider builds, tests, compatibility checks, and release artifact generation run in CI or documented release automation.
+
 Exit criteria:
 
 - Validation runs automatically on PRs.
@@ -582,6 +774,19 @@ Candidate implementation:
 - Add restore-test coverage for case data once case management exists.
 - Add backup monitoring alerts.
 
+Tasks:
+
+- Task: Define SIEM RTO and RPO.
+  Success criteria: DR documentation states recovery targets for ingest, search, alerting, case management, admin API, and integrations.
+- Task: Expand restore drills.
+  Success criteria: Restore drills cover logs, metrics, traces, dashboards, detections, lookups, admin API state, Terraform assumptions, integration config, and cases.
+- Task: Add backup monitoring.
+  Success criteria: Backup success, age, size, and restore-test results are monitored and alert on failure.
+- Task: Define degraded-mode operations.
+  Success criteria: Documentation explains how analysts continue triage when Grafana, case management, admin API, or integrations are unavailable.
+- Task: Add DR evidence process.
+  Success criteria: Every drill records date, operator, scope, result, gaps, and remediation items.
+
 Exit criteria:
 
 - RTO/RPO targets are documented.
@@ -614,6 +819,19 @@ Candidate implementation:
 - Add dashboard links for common pivots.
 - Add case note templates.
 - Add analyst onboarding checklist.
+
+Tasks:
+
+- Task: Document alert-to-case triage workflow.
+  Success criteria: Analyst workflow documentation shows how to open an alert, inspect evidence, create or link a case, escalate, and close.
+- Task: Define entity pivot workflows.
+  Success criteria: User, host, IP, application, cloud account, source, and detection pivots are documented with LogQL examples or dashboard links.
+- Task: Add case note and evidence templates.
+  Success criteria: Templates exist for initial triage, escalation, false positive, containment, handoff, and closure.
+- Task: Add analyst onboarding guide.
+  Success criteria: New analysts can run a guided exercise using sample data, dashboard links, detections, runbooks, and case workflow.
+- Task: Validate representative investigation.
+  Success criteria: A documented drill proves an analyst can complete a representative investigation without platform-owner help.
 
 Exit criteria:
 
