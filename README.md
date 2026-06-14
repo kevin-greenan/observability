@@ -83,6 +83,7 @@ make ps          # show service status
 make logs        # follow logs from all services
 make validate    # validate docker-compose.yml
 make siem-smoke-test # verify SIEM ingest paths after startup
+make detection-test # verify SIEM detection fixtures after startup
 make down        # stop containers and keep volumes
 make clean       # stop containers and remove volumes
 ```

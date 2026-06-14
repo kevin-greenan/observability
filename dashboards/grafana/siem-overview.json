@@ -348,7 +348,7 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=\"siem-file-collector\"} |~ \"(?i)powershell.*(bypass|encodedcommand|downloadstring)\" [$__range]))",
+          "expr": "sum(count_over_time({job=\"siem-file-collector\"} |= \"powershell\" |= \"Bypass\" [$__range]))",
           "queryType": "range",
           "refId": "A"
         }
