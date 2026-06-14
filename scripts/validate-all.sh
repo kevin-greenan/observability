@@ -69,6 +69,7 @@ echo "validating repository guardrails"
 ./scripts/identity-secrets-test.sh
 ./scripts/production-deployment-test.sh
 ./scripts/restore-test.sh
+./scripts/auditability-test.sh
 
 if [[ "${VALIDATE_ALL_LIVE:-0}" == "1" ]]; then
   echo "running live validation"

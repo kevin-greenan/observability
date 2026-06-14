@@ -574,7 +574,7 @@ The `codex/siem-capacity-load-testing` branch satisfies this milestone by adding
 
 ## Milestone 11: Auditability
 
-Status: `planned`
+Status: `done`
 
 Goal: Track meaningful administrative and content changes.
 
@@ -600,15 +600,19 @@ Candidate implementation:
 
 Open decisions:
 
-- Whether Grafana OSS audit capabilities are enough.
-- Where to store sensitive lookup update records.
-- Whether source onboarding requires approvals.
+- Grafana OSS audit capabilities are not enough for production accountability; use Grafana Enterprise/Cloud audit logs for production administrative audit trails.
+- Store sensitive lookup update records in the approved ticketing system, secret manager, or private evidence repository, not in this public repository.
+- Production or high-criticality source onboarding requires source owner and SIEM/platform owner approval.
 
 Exit criteria:
 
 - Auditability doc exists.
 - Change process is documented.
 - Rule/source onboarding PR checklist exists.
+
+Completion note:
+
+The `codex/siem-auditability` branch satisfies this milestone by adding `docs/siem/auditability.md`, SIEM-focused PR templates for general, detection, source onboarding, and lookup changes, `make auditability-test`, and validation coverage in `make validate-all`.
 
 ## Suggested Implementation Order
 

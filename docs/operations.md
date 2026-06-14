@@ -47,6 +47,12 @@ Validate the selected production deployment target:
 make production-deployment-test
 ```
 
+Validate the SIEM auditability documentation and PR checklists:
+
+```bash
+make auditability-test
+```
+
 Run full static validation before upgrade or release changes:
 
 ```bash

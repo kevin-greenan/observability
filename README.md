@@ -92,6 +92,7 @@ make detection-test # verify SIEM detection fixtures after startup
 make security-boundary-test # verify optional TLS edge proxy path
 make identity-secrets-test # verify SIEM identity/RBAC and secrets docs
 make production-deployment-test # verify production Compose target
+make auditability-test # verify SIEM audit docs and PR checklists
 make down        # stop containers and keep volumes
 make clean       # stop containers and remove volumes
 ```

@@ -131,5 +131,6 @@ More docs:
 - [Storage backends](storage-backends.md)
 - [Load testing](load-testing.md)
 - [Upgrades](upgrades.md)
+- [Auditability](auditability.md)
 - [Production readiness](production-readiness.md)
 - [Production milestones](milestones.md)
