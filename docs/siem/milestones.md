@@ -25,7 +25,7 @@ Current baseline:
 
 ## Milestone 0: Pilot Baseline
 
-Status: `pilot`
+Status: `done`
 
 Goal: Keep the current branch usable for a small/friendly security team pilot.
 
@@ -47,6 +47,20 @@ Exit criteria:
 - Grafana dashboard `siem-overview` loads.
 - Prometheus query `up{job="siem-collector"}` returns `1`.
 - Loki ruler loads `detections/loki/security-rules.yaml`.
+
+Completion note:
+
+The `codex/siem-production-readiness` branch satisfies this milestone. It does not make the platform production-ready; it establishes a validated pilot baseline for the later milestones.
+
+## Partial Progress in This PR
+
+The production-readiness branch also makes partial progress on later milestones:
+
+- Milestone 4: Loki rules are mounted and evaluated, but alert routing, contact points, ownership metadata, and runbooks are not complete.
+- Milestone 6: The SIEM Overview dashboard shows source and parser status, but source inventory and stale-source detection are not complete.
+- Milestone 9: Validation now covers Compose, Vector, Prometheus, Loki, dashboard JSON, and smoke testing, but image pinning, upgrade docs, and rollback procedures are not complete.
+
+Do not mark those milestones complete until their exit criteria are satisfied.
 
 ## Milestone 1: Security Boundary and TLS
 
@@ -576,4 +590,3 @@ Rationale:
 - Alert routing should follow once rules have owners and runbooks.
 - TLS, identity, secrets, durable storage, and deployment target become mandatory before real production data.
 - Capacity, upgrade, and auditability harden the platform for sustained use.
-
