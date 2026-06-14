@@ -52,3 +52,37 @@ groups:
           description: Firewall events include denied traffic to destination port 22.
           runbook_url: docs/siem/runbooks/inbound-ssh-denied.md
           false_positive_notes: Expected from internet scanning, vulnerability scanners, and approved connectivity tests.
+
+      - alert: HttpEventSourceStale
+        expr: absent_over_time({job="siem-file-collector", source_id="http-event"}[30m]) == 1
+        for: 5m
+        labels:
+          id: siem-quality-001
+          severity: medium
+          category: data-quality
+          owner: security-platform
+          status: experimental
+          mitre_tactic: collection
+          mitre_technique: data-source-availability
+        annotations:
+          summary: HTTP event source has stopped sending events
+          description: No HTTP event collector events have been observed inside the expected freshness window.
+          runbook_url: docs/siem/runbooks/critical-source-stale.md
+          false_positive_notes: Expected during stack shutdown, planned source maintenance, or low-volume lab environments.
+
+      - alert: SyslogSourceStale
+        expr: absent_over_time({job="siem-file-collector", source_id="syslog"}[30m]) == 1
+        for: 5m
+        labels:
+          id: siem-quality-002
+          severity: medium
+          category: data-quality
+          owner: security-platform
+          status: experimental
+          mitre_tactic: collection
+          mitre_technique: data-source-availability
+        annotations:
+          summary: Syslog source has stopped sending events
+          description: No syslog events have been observed inside the expected freshness window.
+          runbook_url: docs/siem/runbooks/critical-source-stale.md
+          false_positive_notes: Expected during stack shutdown, planned source maintenance, or low-volume lab environments.

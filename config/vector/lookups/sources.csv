@@ -1,0 +1,4 @@
+source_type,source_id,display_name,owner,environment,criticality,expected_daily_events,stale_after_minutes,parser_expectation,enrichment_required
+file,file-drop,File Drop Ingest,security-platform,lab,medium,100,60,json_csv_key_value_or_raw,false
+http_event_collector,http-event,HTTP Event Collector,security-platform,lab,high,100,30,json_or_raw,true
+syslog,syslog,Syslog Ingest,network-security,lab,high,100,30,key_value_or_raw,false

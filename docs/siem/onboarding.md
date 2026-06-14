@@ -129,6 +129,7 @@ curl -s http://localhost:8088/event \
 ```
 
 Events are normalized under the source type `http_event_collector`.
+The source inventory enriches these events with `source_id="http-event"`.
 
 Query HTTP collector events:
 
@@ -145,3 +146,7 @@ Query HTTP collector events:
 | `SIEM_HTTP_EVENT_PORT` | `8088` | Token-authenticated HTTP event ingest |
 | `SIEM_SYSLOG_TCP_PORT` | `5514` | Syslog over TCP |
 | `SIEM_SYSLOG_UDP_PORT` | `5514` | Syslog over UDP |
+
+## Source Inventory
+
+After adding a new source family, update `config/vector/lookups/sources.csv` so events carry ownership, criticality, parser expectations, and freshness metadata. See [Source inventory](source-inventory.md).

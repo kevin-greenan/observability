@@ -19,7 +19,9 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "links": [],
+  "links": [
+
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -64,7 +66,9 @@
               "mode": "off"
             }
           },
-          "mappings": [],
+          "mappings": [
+
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -76,7 +80,9 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -131,9 +137,13 @@
               "viz": false
             }
           },
-          "mappings": []
+          "mappings": [
+
+          ]
         },
-        "overrides": []
+        "overrides": [
+
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -175,7 +185,7 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "sum by (parse_status) (count_over_time({job=\"siem-file-collector\"}[$__range]))",
+          "expr": "sum by (parse_status) (count_over_time({job=\"siem-file-collector\", source_id!=\"\"}[$__range]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -230,7 +240,9 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -250,7 +262,9 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -300,7 +314,9 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -316,7 +332,9 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -366,7 +384,9 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -382,7 +402,9 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -422,6 +444,198 @@
       ],
       "title": "Collector Up",
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 18,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [
+
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "sum by (source_id) (count_over_time({job=\"siem-file-collector\", source_id!=\"\"}[15m]))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Source Freshness by Source ID",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 18,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [
+
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 23
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "sum by (source_id, parse_status) (count_over_time({job=\"siem-file-collector\", source_id!=\"\"}[$__range]))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Parser Status by Source ID",
+      "type": "timeseries"
     }
   ],
   "refresh": "30s",
@@ -431,16 +645,19 @@
     "security"
   ],
   "templating": {
-    "list": []
+    "list": [
+
+    ]
   },
   "time": {
     "from": "now-1h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+  },
   "timezone": "browser",
   "title": "SIEM Overview",
   "uid": "siem-overview",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

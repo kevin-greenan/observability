@@ -98,6 +98,7 @@ wait_for_query "file JSON ingest" "{job=\"siem-file-collector\",source_type=\"fi
 wait_for_query "CSV file ingest" "{job=\"siem-file-collector\",source_type=\"file\",parse_status=\"csv\"} |= \"${RUN_ID}\"" "fields"
 wait_for_query "key/value file ingest" "{job=\"siem-file-collector\",source_type=\"file\",parse_status=\"key_value\"} |= \"${RUN_ID}\"" "outcome"
 wait_for_query "HTTP event ingest" "{job=\"siem-file-collector\",source_type=\"http_event_collector\"} |= \"${RUN_ID}\"" "http event"
+wait_for_query "source inventory enrichment" "{job=\"siem-file-collector\",source_id=\"http-event\"} |= \"${RUN_ID}\"" "source_owner"
 wait_for_query "lookup enrichment" "{job=\"siem-file-collector\",source_type=\"http_event_collector\"} |= \"${RUN_ID}\"" "asset_inventory"
 wait_for_query "syslog ingest" "{job=\"siem-file-collector\",source_type=\"syslog\"} |= \"${RUN_ID}\"" "syslog event"
 

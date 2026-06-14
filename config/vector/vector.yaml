@@ -19,6 +19,25 @@ enrichment_tables:
       environment: string
       criticality: string
 
+  source_inventory:
+    type: file
+    file:
+      path: /etc/vector/lookups/sources.csv
+      encoding:
+        type: csv
+        include_headers: true
+    schema:
+      source_type: string
+      source_id: string
+      display_name: string
+      owner: string
+      environment: string
+      criticality: string
+      expected_daily_events: string
+      stale_after_minutes: string
+      parser_expectation: string
+      enrichment_required: string
+
 sources:
   internal_metrics:
     type: internal_metrics
@@ -98,6 +117,25 @@ transforms:
       .siem.parser_mode = "raw-first"
       .siem.schema_version = "1"
 
+      source_record, source_err = get_enrichment_table_record("source_inventory", {"source_type": source_type})
+      if source_err == null {
+        .siem.source_id = source_record.source_id
+        .siem.source_name = source_record.display_name
+        .siem.source_owner = source_record.owner
+        .siem.source_environment = source_record.environment
+        .siem.source_criticality = source_record.criticality
+        .siem.source_expected_daily_events = source_record.expected_daily_events
+        .siem.source_stale_after_minutes = source_record.stale_after_minutes
+        .siem.source_parser_expectation = source_record.parser_expectation
+        .siem.source_enrichment_required = source_record.enrichment_required
+      } else {
+        .siem.source_id = source_type
+        .siem.source_name = source_type
+        .siem.source_owner = "unknown"
+        .siem.source_environment = "unknown"
+        .siem.source_criticality = "unknown"
+      }
+
       parsed_json, json_err = parse_json(raw)
       if json_err == null && is_object(parsed_json) {
         . = merge!(., parsed_json)
@@ -162,4 +200,5 @@ sinks:
     labels:
       job: siem-file-collector
       source_type: "{{ siem.source_type }}"
+      source_id: "{{ siem.source_id }}"
       parse_status: "{{ siem.parse_status }}"

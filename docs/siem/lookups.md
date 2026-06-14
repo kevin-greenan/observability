@@ -8,6 +8,8 @@ This stack supports static CSV lookups through Vector enrichment tables. The fir
 config/vector/lookups/assets.csv
 ```
 
+Source ownership and freshness metadata is tracked separately in [Source inventory](source-inventory.md).
+
 ## Asset Inventory
 
 Current columns:

@@ -117,6 +117,7 @@ More docs:
 - [Data onboarding](onboarding.md)
 - [Parser strategy](parser-strategy.md)
 - [Static lookups](lookups.md)
+- [Source inventory](source-inventory.md)
 - [Detections](detections.md)
 - [Detection lifecycle](detection-lifecycle.md)
 - [Production readiness](production-readiness.md)
