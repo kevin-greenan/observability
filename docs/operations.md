@@ -29,6 +29,12 @@ make validate
 
 The validation script runs `docker compose config --quiet`.
 
+Validate the SIEM identity/RBAC and secret-handling documentation:
+
+```bash
+make identity-secrets-test
+```
+
 ## Security Boundary Test
 
 To verify the optional TLS edge proxy path:

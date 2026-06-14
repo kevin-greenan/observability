@@ -1,4 +1,4 @@
-.PHONY: up down restart logs ps validate siem-smoke-test detection-test alert-routing-test security-boundary-test clean
+.PHONY: up down restart logs ps validate siem-smoke-test detection-test alert-routing-test security-boundary-test identity-secrets-test clean
 
 COMPOSE ?= docker compose
 
@@ -31,6 +31,9 @@ alert-routing-test:
 
 security-boundary-test:
 	./scripts/security-boundary-test.sh
+
+identity-secrets-test:
+	./scripts/identity-secrets-test.sh
 
 clean:
 	$(COMPOSE) down --volumes --remove-orphans

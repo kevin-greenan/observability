@@ -111,7 +111,7 @@ The `codex/siem-security-boundary` branch satisfies this milestone by binding ba
 
 ## Milestone 2: Identity, RBAC, and Secrets
 
-Status: `planned`
+Status: `done`
 
 Goal: Replace local/shared credentials with production-appropriate identity and secrets management.
 
@@ -153,6 +153,10 @@ Exit criteria:
 - Secret rotation process documented.
 - Token/password storage guidance documented.
 - Grafana role model documented.
+
+Completion note:
+
+The `codex/siem-identity-secrets` branch satisfies this milestone by adding identity/RBAC documentation, secret storage and rotation guidance, a local secret-file guardrail, a Docker Compose secrets override example, local-only `.env.example` warnings, and `make identity-secrets-test`.
 
 ## Milestone 3: Durable Storage, Retention, and Backup
 
