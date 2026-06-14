@@ -68,11 +68,13 @@ This starts the edge proxy, checks Grafana through HTTPS, and sends a bearer-tok
 
 ## Production Gaps
 
-Before using this with sensitive production security data, complete and routinely run:
+Before using this with sensitive production security data, routinely run:
 
 - `make security-boundary-test`
 - `make identity-secrets-test`
 - `make restore-test`
 - `make production-deployment-test`
+- `make auditability-test`
+- `make validate-all` before image upgrades, release changes, and deployment promotion.
 
-Remaining production hardening is tracked by the upgrade/release, capacity/load, and auditability milestones.
+For production beyond a single-host pilot, design a high-availability deployment target, managed identity integration, centralized secret management, and durable object storage before onboarding critical regulated data.

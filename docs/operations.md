@@ -29,6 +29,12 @@ make validate
 
 The validation script runs `docker compose config --quiet`.
 
+Validate documentation organization and stale links:
+
+```bash
+make docs-structure-test
+```
+
 Validate the SIEM identity/RBAC and secret-handling documentation:
 
 ```bash
@@ -214,4 +220,4 @@ ALLOY_VERSION=<tested-version>
 VECTOR_VERSION=<tested-version>
 ```
 
-Run `make validate` and restart the stack after changing tags.
+Run `make validate-all` and restart the stack after changing tags.

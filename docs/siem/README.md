@@ -112,7 +112,7 @@ Enriched events:
 {job="siem-file-collector"} | json | asset_criticality="high"
 ```
 
-More docs:
+## Operational workflows
 
 - [Data onboarding](onboarding.md)
 - [Parser strategy](parser-strategy.md)
@@ -121,16 +121,22 @@ More docs:
 - [Source inventory](source-inventory.md)
 - [Detections](detections.md)
 - [Detection lifecycle](detection-lifecycle.md)
+- [Runbooks](runbooks/README.md)
+
+## Security operations
+
 - [Alert routing](alert-routing.md)
 - [Security model](security-model.md)
 - [Identity and RBAC](identity-rbac.md)
 - [Secrets](secrets.md)
+- [Auditability](auditability.md)
+
+## Production and governance
+
+- [Production readiness](production-readiness.md)
 - [Production architecture](production-architecture.md)
-- [Capacity planning](capacity-planning.md)
-- [Backup and restore](backup-restore.md)
 - [Storage backends](storage-backends.md)
+- [Backup and restore](backup-restore.md)
+- [Capacity planning](capacity-planning.md)
 - [Load testing](load-testing.md)
 - [Upgrades](upgrades.md)
-- [Auditability](auditability.md)
-- [Production readiness](production-readiness.md)
-- [Production milestones](milestones.md)
