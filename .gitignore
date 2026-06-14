@@ -1,6 +1,7 @@
 .env
 .env.*
 !.env.example
+!deploy/compose/production/.env.production.example
 .DS_Store
 
 # Local scratch output

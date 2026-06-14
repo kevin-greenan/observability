@@ -1,19 +1,21 @@
 # Production Architecture
 
-The current deployment target is a single-host Docker Compose pilot with a production-like security boundary. It is suitable for lab and small-team pilot use after the security boundary is enabled, but it is not a highly available production platform.
+The selected deployment target for this repository is a single-host Docker Compose production pilot with a TLS edge proxy, secret-file override pattern, and documented durable storage migration path.
 
-## Selected Boundary Pattern
+It is suitable for a small-team pilot after the security boundary, identity, secrets, retention, and restore controls are in place. It is not a highly available production platform.
 
-For this milestone, the selected pattern is:
+## Selected Runtime Target
 
-- Docker Compose single-host runtime.
+The selected runtime target is:
+
+- Single-host Docker Compose production pilot.
 - Backend APIs bound to loopback by default.
 - Optional Caddy TLS edge proxy for Grafana and HTTP event ingest.
 - SSO and managed secrets required before production security data.
 - Syslog exposed only when the host firewall restricts sender networks.
 - Direct Loki, Mimir, Tempo, Prometheus, Alloy, and Vector diagnostic access kept private.
 
-Kubernetes ingress or managed Grafana/Loki/Mimir/Tempo remain future deployment targets.
+Kubernetes ingress or managed Grafana/Loki/Mimir/Tempo remain later scale-out targets, not the current repo target.
 
 ## Deployment Modes
 
@@ -21,7 +23,23 @@ Kubernetes ingress or managed Grafana/Loki/Mimir/Tempo remain future deployment 
 | --- | --- | --- |
 | Local lab | `docker compose up -d` | All service APIs available on `localhost` only. |
 | Security-boundary pilot | `docker compose --profile edge up -d` | Adds TLS edge proxy on `8443`. |
-| Future production | To be defined | HA runtime, managed secrets, durable object storage, and identity provider integration. |
+| Production Compose pilot | `docker compose --env-file deploy/compose/production/.env.production.example -f docker-compose.yml -f deploy/compose/production/docker-compose.production.example.yml -f deploy/compose/production/docker-compose.secrets.example.yml --profile edge up -d` | Single-host pilot with TLS edge, secret files, logging limits, and lab generators disabled. |
+| Future HA production | To be designed later | Kubernetes, managed Grafana stack, or another HA runtime. |
+
+## Deployment Layout
+
+Production-pilot files live under:
+
+```text
+deploy/compose/production/
+```
+
+| File | Purpose |
+| --- | --- |
+| `.env.production.example` | Environment template with private backend binds and public edge bind. |
+| `docker-compose.production.example.yml` | Production-pilot Compose override. |
+| `docker-compose.secrets.example.yml` | Secret-file override pattern. |
+| `README.md` | Operator start pattern and promotion checklist. |
 
 ## External Surfaces
 
@@ -50,10 +68,11 @@ This starts the edge proxy, checks Grafana through HTTPS, and sends a bearer-tok
 
 ## Production Gaps
 
-Before using this with sensitive production security data, complete the later milestones for:
+Before using this with sensitive production security data, complete and routinely run:
 
-- Identity, RBAC, and secrets.
-- Durable storage, retention, and backup.
-- Upgrade and release management.
-- Capacity and load testing.
-- Auditability.
+- `make security-boundary-test`
+- `make identity-secrets-test`
+- `make restore-test`
+- `make production-deployment-test`
+
+Remaining production hardening is tracked by the upgrade/release, capacity/load, and auditability milestones.

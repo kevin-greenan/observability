@@ -41,6 +41,12 @@ Validate the config backup and restore drill:
 make restore-test
 ```
 
+Validate the selected production deployment target:
+
+```bash
+make production-deployment-test
+```
+
 ## Security Boundary Test
 
 To verify the optional TLS edge proxy path:

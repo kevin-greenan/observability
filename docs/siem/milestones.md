@@ -438,7 +438,7 @@ The `codex/siem-normalization-standard` branch satisfies this milestone by addin
 
 ## Milestone 8: Production Deployment Target
 
-Status: `planned`
+Status: `done`
 
 Goal: Decide and document the production runtime target.
 
@@ -472,6 +472,10 @@ Exit criteria:
 - Production deployment target is selected.
 - Architecture document names what is production vs pilot.
 - Deployment path includes TLS, secrets, storage, and upgrade guidance.
+
+Completion note:
+
+The `codex/siem-production-deployment-target` branch satisfies this milestone by selecting a single-host Docker Compose production pilot target, adding `deploy/compose/production/` overlays and operator docs, updating the production architecture, and adding `make production-deployment-test`.
 
 ## Milestone 9: Upgrade, Release, and Change Management
 
