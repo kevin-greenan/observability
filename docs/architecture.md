@@ -7,6 +7,10 @@ This stack is designed for local development and repeatable observability experi
 ```mermaid
 flowchart LR
   docker["Docker containers"] --> alloy["Grafana Alloy"]
+  files["SIEM file drop"] --> vector["Vector SIEM collector"]
+  syslog["Syslog TCP/UDP"] --> vector
+  hec["HTTP Event Collector"] --> vector
+  vector --> loki
   alloy --> loki["Loki"]
   prometheus["Prometheus"] --> mimir["Mimir"]
   telemetrygen["Telemetrygen"] --> tempo["Tempo"]
@@ -25,6 +29,7 @@ flowchart LR
 | Mimir | Prometheus-compatible long-term metrics backend | `mimir-data` |
 | Prometheus | Scrapes local services and remote-writes to Mimir | `prometheus-data` |
 | Alloy | Collects Docker container logs and its own metrics | `alloy-data` |
+| Vector | Collects drop-zone SIEM files and forwards raw-first events to Loki | `vector-data` |
 
 ## Persistence Model
 
@@ -40,6 +45,7 @@ Runtime configuration is split by component under `config/`.
 - `config/mimir/mimir.yaml` runs Mimir in single-binary filesystem mode.
 - `config/prometheus/prometheus.yaml` scrapes stack metrics and remote-writes them to Mimir.
 - `config/alloy/config.alloy` discovers Docker containers and forwards logs to Loki.
+- `config/vector/vector.yaml` watches the SIEM ingest drop zone and forwards events to Loki.
 
 ## Local-Only Assumptions
 

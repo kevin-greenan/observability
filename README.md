@@ -9,6 +9,8 @@ Docker Compose stack for local logging, metrics, and tracing with the Grafana LG
 
 The stack also includes Prometheus for local scraping and remote write, Grafana Alloy for Docker log collection, a small log generator, and an OpenTelemetry trace generator so the environment has sample telemetry after startup.
 
+It also includes a starter SIEM framework with raw-first security event onboarding. See [docs/siem/README.md](docs/siem/README.md).
+
 ## Quick Start
 
 ```bash
@@ -38,6 +40,9 @@ Change `GRAFANA_ADMIN_PASSWORD` in `.env` before using this outside a local work
 | Mimir | http://localhost:9009 | Metrics backend API |
 | Prometheus | http://localhost:9090 | Local scraper and remote write source |
 | Alloy | http://localhost:12345 | Collector UI and diagnostics |
+| SIEM Collector | http://localhost:8686 | File-based security event collector diagnostics |
+| SIEM HTTP Event Collector | http://localhost:8088 | Token-authenticated HTTP event ingestion |
+| SIEM Syslog | localhost:5514 | TCP/UDP syslog ingestion |
 
 ## Repository Layout
 
@@ -52,10 +57,16 @@ Change `GRAFANA_ADMIN_PASSWORD` in `.env` before using this outside a local work
 │   ├── loki/
 │   ├── mimir/
 │   ├── prometheus/
-│   └── tempo/
+│   ├── tempo/
+│   └── vector/
+├── detections/
+├── examples/
+│   └── ingest/
 ├── docs/
 │   ├── architecture.md
-│   └── operations.md
+│   ├── operations.md
+│   └── siem/
+├── ingest/
 └── scripts/
     └── validate.sh
 ```
