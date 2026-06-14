@@ -28,6 +28,8 @@ Default credentials:
 
 Change `GRAFANA_ADMIN_PASSWORD` in `.env` before using this outside a local workstation.
 
+By default, service ports bind to `127.0.0.1`. For a production-like SIEM boundary, use the optional TLS edge proxy profile and review [docs/siem/security-model.md](docs/siem/security-model.md).
+
 ## Ports
 
 | Service | URL | Purpose |
@@ -44,6 +46,7 @@ Change `GRAFANA_ADMIN_PASSWORD` in `.env` before using this outside a local work
 | SIEM Collector Metrics | http://localhost:9598 | Collector Prometheus metrics |
 | SIEM HTTP Event Collector | http://localhost:8088 | Token-authenticated HTTP event ingestion |
 | SIEM Syslog | localhost:5514 | TCP/UDP syslog ingestion |
+| SIEM TLS Edge Proxy | https://localhost:8443 | Optional Grafana and HTTP event ingress via `--profile edge` |
 
 ## Repository Layout
 
@@ -84,6 +87,7 @@ make logs        # follow logs from all services
 make validate    # validate docker-compose.yml
 make siem-smoke-test # verify SIEM ingest paths after startup
 make detection-test # verify SIEM detection fixtures after startup
+make security-boundary-test # verify optional TLS edge proxy path
 make down        # stop containers and keep volumes
 make clean       # stop containers and remove volumes
 ```

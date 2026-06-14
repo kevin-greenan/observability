@@ -122,5 +122,7 @@ More docs:
 - [Detections](detections.md)
 - [Detection lifecycle](detection-lifecycle.md)
 - [Alert routing](alert-routing.md)
+- [Security model](security-model.md)
+- [Production architecture](production-architecture.md)
 - [Production readiness](production-readiness.md)
 - [Production milestones](milestones.md)
