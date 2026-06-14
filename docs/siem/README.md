@@ -135,6 +135,7 @@ Enriched events:
 
 - [Production readiness](production-readiness.md)
 - [Production architecture](production-architecture.md)
+- [Production SIEM milestones](milestones.md)
 - [Storage backends](storage-backends.md)
 - [Backup and restore](backup-restore.md)
 - [Capacity planning](capacity-planning.md)

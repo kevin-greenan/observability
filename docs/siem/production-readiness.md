@@ -2,6 +2,8 @@
 
 This stack is suitable for a local lab and a small security-team pilot. Treat it as a production-pilot foundation, not a highly available enterprise SIEM.
 
+The remaining requirements for a fully production-ready security-team platform are tracked in [Production SIEM milestones](milestones.md).
+
 ## Ready for Pilot
 
 - Raw-first event ingestion into Loki.

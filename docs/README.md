@@ -12,6 +12,7 @@ This directory is the documentation entry point for the LGTM observability stack
 - [SIEM overview](siem/README.md): security event ingestion, investigation, and documentation map.
 - [Production readiness](siem/production-readiness.md): pilot status, production prerequisites, and go/no-go checklist.
 - [Production architecture](siem/production-architecture.md): selected single-host Compose pilot target and deployment modes.
+- [Production SIEM milestones](siem/milestones.md): remaining requirements for a fully production-ready security-team platform.
 
 ## Operator Workflows
 
@@ -24,6 +25,7 @@ This directory is the documentation entry point for the LGTM observability stack
 - [Detection lifecycle](siem/detection-lifecycle.md)
 - [Alert routing](siem/alert-routing.md)
 - [Auditability](siem/auditability.md)
+- [Production SIEM milestones](siem/milestones.md)
 - [Backup and restore](siem/backup-restore.md)
 - [Upgrades](siem/upgrades.md)
 - [Capacity planning](siem/capacity-planning.md)
