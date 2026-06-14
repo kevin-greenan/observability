@@ -29,6 +29,16 @@ make validate
 
 The validation script runs `docker compose config --quiet`.
 
+## Security Boundary Test
+
+To verify the optional TLS edge proxy path:
+
+```bash
+make security-boundary-test
+```
+
+The test starts the `edge` Compose profile, checks Grafana over HTTPS, and sends one HTTP event through the TLS proxy. The edge proxy uses Caddy internal TLS for local validation.
+
 ## SIEM Smoke Test
 
 After the stack is running, verify file, CSV, key/value, HTTP, syslog, and lookup-enriched ingest:

@@ -52,4 +52,4 @@ Runtime configuration is split by component under `config/`.
 
 ## Local-Only Assumptions
 
-This is not a production deployment. It intentionally uses single replicas, filesystem storage, no TLS, and local credentials. For production, replace filesystem storage with object storage, enable authentication/TLS, define resource limits, and run each backend with a high-availability topology.
+This is not a full production deployment. It intentionally uses single replicas, filesystem storage, and local credentials. The optional `edge` profile provides a testable TLS boundary for Grafana and HTTP event ingest, but production still needs durable storage, identity integration, managed secrets, resource limits, and a high-availability topology.

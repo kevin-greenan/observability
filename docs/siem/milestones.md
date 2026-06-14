@@ -64,7 +64,7 @@ Do not mark those milestones complete until their exit criteria are satisfied.
 
 ## Milestone 1: Security Boundary and TLS
 
-Status: `planned`
+Status: `done`
 
 Goal: Define and implement a safe network/security boundary for production-like use.
 
@@ -104,6 +104,10 @@ Exit criteria:
 - TLS path documented and tested.
 - Default production guidance does not expose backend APIs directly.
 - `SIEM_HTTP_EVENT_TOKEN` rotation instructions exist.
+
+Completion note:
+
+The `codex/siem-security-boundary` branch satisfies this milestone by binding backend ports to loopback by default, adding an optional Caddy TLS edge proxy profile, documenting trust zones and firewall expectations, adding HTTP event token rotation guidance, and adding `make security-boundary-test` to validate the TLS path.
 
 ## Milestone 2: Identity, RBAC, and Secrets
 

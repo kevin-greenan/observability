@@ -1,0 +1,16 @@
+https://lgtm-edge-proxy:8443 {
+	tls internal
+	encode zstd gzip
+
+	@http_event_collector {
+		path /event /event/* /hec /hec/*
+	}
+
+	handle @http_event_collector {
+		reverse_proxy siem-collector:8088
+	}
+
+	handle {
+		reverse_proxy grafana:3000
+	}
+}

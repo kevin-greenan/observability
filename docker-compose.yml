@@ -9,7 +9,7 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "false"
       GF_USERS_DEFAULT_THEME: system
     ports:
-      - "${GRAFANA_HTTP_PORT:-3000}:3000"
+      - "${GRAFANA_HTTP_BIND_ADDRESS:-127.0.0.1}:${GRAFANA_HTTP_PORT:-3000}:3000"
     volumes:
       - grafana-data:/var/lib/grafana
       - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
@@ -28,7 +28,7 @@ services:
     command:
       - -config.file=/etc/loki/loki.yaml
     ports:
-      - "${LOKI_HTTP_PORT:-3100}:3100"
+      - "${LOKI_HTTP_BIND_ADDRESS:-127.0.0.1}:${LOKI_HTTP_PORT:-3100}:3100"
     volumes:
       - ./config/loki/loki.yaml:/etc/loki/loki.yaml:ro
       - ./detections/loki:/loki/rules/fake:ro
@@ -43,9 +43,9 @@ services:
     command:
       - -config.file=/etc/tempo/tempo.yaml
     ports:
-      - "${TEMPO_HTTP_PORT:-3200}:3200"
-      - "${TEMPO_OTLP_GRPC_PORT:-4317}:4317"
-      - "${TEMPO_OTLP_HTTP_PORT:-4318}:4318"
+      - "${TEMPO_HTTP_BIND_ADDRESS:-127.0.0.1}:${TEMPO_HTTP_PORT:-3200}:3200"
+      - "${TEMPO_OTLP_GRPC_BIND_ADDRESS:-127.0.0.1}:${TEMPO_OTLP_GRPC_PORT:-4317}:4317"
+      - "${TEMPO_OTLP_HTTP_BIND_ADDRESS:-127.0.0.1}:${TEMPO_OTLP_HTTP_PORT:-4318}:4318"
     volumes:
       - ./config/tempo/tempo.yaml:/etc/tempo/tempo.yaml:ro
       - tempo-data:/var/tempo
@@ -59,7 +59,7 @@ services:
     command:
       - -config.file=/etc/mimir/mimir.yaml
     ports:
-      - "${MIMIR_HTTP_PORT:-9009}:9009"
+      - "${MIMIR_HTTP_BIND_ADDRESS:-127.0.0.1}:${MIMIR_HTTP_PORT:-9009}:9009"
     volumes:
       - ./config/mimir/mimir.yaml:/etc/mimir/mimir.yaml:ro
       - mimir-data:/data
@@ -75,7 +75,7 @@ services:
       - --storage.tsdb.path=/prometheus
       - --web.enable-lifecycle
     ports:
-      - "${PROMETHEUS_HTTP_PORT:-9090}:9090"
+      - "${PROMETHEUS_HTTP_BIND_ADDRESS:-127.0.0.1}:${PROMETHEUS_HTTP_PORT:-9090}:9090"
     volumes:
       - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
       - prometheus-data:/prometheus
@@ -94,7 +94,7 @@ services:
       - --server.http.listen-addr=0.0.0.0:12345
       - --storage.path=/var/lib/alloy/data
     ports:
-      - "12345:12345"
+      - "${ALLOY_HTTP_BIND_ADDRESS:-127.0.0.1}:${ALLOY_HTTP_PORT:-12345}:12345"
     volumes:
       - ./config/alloy/config.alloy:/etc/alloy/config.alloy:ro
       - alloy-data:/var/lib/alloy/data
@@ -113,11 +113,11 @@ services:
       - --config
       - /etc/vector/vector.yaml
     ports:
-      - "${SIEM_COLLECTOR_HTTP_PORT:-8686}:8686"
-      - "${SIEM_COLLECTOR_METRICS_PORT:-9598}:9598"
-      - "${SIEM_HTTP_EVENT_PORT:-8088}:8088"
-      - "${SIEM_SYSLOG_TCP_PORT:-5514}:5514/tcp"
-      - "${SIEM_SYSLOG_UDP_PORT:-5514}:5514/udp"
+      - "${SIEM_COLLECTOR_HTTP_BIND_ADDRESS:-127.0.0.1}:${SIEM_COLLECTOR_HTTP_PORT:-8686}:8686"
+      - "${SIEM_COLLECTOR_METRICS_BIND_ADDRESS:-127.0.0.1}:${SIEM_COLLECTOR_METRICS_PORT:-9598}:9598"
+      - "${SIEM_HTTP_EVENT_BIND_ADDRESS:-127.0.0.1}:${SIEM_HTTP_EVENT_PORT:-8088}:8088"
+      - "${SIEM_SYSLOG_TCP_BIND_ADDRESS:-127.0.0.1}:${SIEM_SYSLOG_TCP_PORT:-5514}:5514/tcp"
+      - "${SIEM_SYSLOG_UDP_BIND_ADDRESS:-127.0.0.1}:${SIEM_SYSLOG_UDP_PORT:-5514}:5514/udp"
     environment:
       SIEM_HTTP_EVENT_TOKEN: ${SIEM_HTTP_EVENT_TOKEN:-change-me}
     volumes:
@@ -127,6 +127,24 @@ services:
       - vector-data:/var/lib/vector
     depends_on:
       - loki
+    networks:
+      - observability
+
+  edge-proxy:
+    image: caddy:${CADDY_VERSION:-2-alpine}
+    container_name: lgtm-edge-proxy
+    restart: unless-stopped
+    profiles:
+      - edge
+    ports:
+      - "${SIEM_EDGE_HTTPS_BIND_ADDRESS:-0.0.0.0}:${SIEM_EDGE_HTTPS_PORT:-8443}:8443"
+    volumes:
+      - ./config/proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - grafana
+      - siem-collector
     networks:
       - observability
 
@@ -172,3 +190,5 @@ volumes:
   prometheus-data:
   alloy-data:
   vector-data:
+  caddy-data:
+  caddy-config:

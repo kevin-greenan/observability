@@ -143,11 +143,20 @@ Query HTTP collector events:
 
 | Environment variable | Default | Purpose |
 | --- | --- | --- |
+| `SIEM_COLLECTOR_HTTP_BIND_ADDRESS` | `127.0.0.1` | Vector diagnostics bind address |
 | `SIEM_COLLECTOR_HTTP_PORT` | `8686` | Vector diagnostics API |
+| `SIEM_COLLECTOR_METRICS_BIND_ADDRESS` | `127.0.0.1` | Vector metrics bind address |
 | `SIEM_COLLECTOR_METRICS_PORT` | `9598` | Vector Prometheus metrics |
+| `SIEM_HTTP_EVENT_BIND_ADDRESS` | `127.0.0.1` | HTTP event ingest bind address |
 | `SIEM_HTTP_EVENT_PORT` | `8088` | Token-authenticated HTTP event ingest |
+| `SIEM_SYSLOG_TCP_BIND_ADDRESS` | `127.0.0.1` | Syslog TCP bind address |
 | `SIEM_SYSLOG_TCP_PORT` | `5514` | Syslog over TCP |
+| `SIEM_SYSLOG_UDP_BIND_ADDRESS` | `127.0.0.1` | Syslog UDP bind address |
 | `SIEM_SYSLOG_UDP_PORT` | `5514` | Syslog over UDP |
+| `SIEM_EDGE_HTTPS_BIND_ADDRESS` | `0.0.0.0` | Optional TLS edge proxy bind address |
+| `SIEM_EDGE_HTTPS_PORT` | `8443` | Optional TLS edge proxy port |
+
+Keep backend and diagnostics ports bound to `127.0.0.1` unless you have a firewall rule and owner for the exposure. See [Security model](security-model.md).
 
 ## Source Inventory
 
