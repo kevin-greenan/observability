@@ -129,6 +129,7 @@ More docs:
 - [Capacity planning](capacity-planning.md)
 - [Backup and restore](backup-restore.md)
 - [Storage backends](storage-backends.md)
+- [Load testing](load-testing.md)
 - [Upgrades](upgrades.md)
 - [Production readiness](production-readiness.md)
 - [Production milestones](milestones.md)

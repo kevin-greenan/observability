@@ -59,6 +59,12 @@ Run live validation against a started stack:
 VALIDATE_ALL_LIVE=1 make validate-all
 ```
 
+Run a focused SIEM load test:
+
+```bash
+make siem-load-test
+```
+
 ## Security Boundary Test
 
 To verify the optional TLS edge proxy path:
