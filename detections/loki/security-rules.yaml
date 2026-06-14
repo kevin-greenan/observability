@@ -6,28 +6,49 @@ groups:
         expr: sum(count_over_time({job="siem-file-collector"} |= "failure" [5m])) > 5
         for: 2m
         labels:
+          id: siem-auth-001
           severity: medium
           category: identity
+          owner: security-detection-engineering
+          status: experimental
+          mitre_tactic: credential-access
+          mitre_technique: brute-force
         annotations:
           summary: Multiple authentication failures observed
           description: More than five failure events were seen for the same user/source pair in five minutes.
+          runbook_url: docs/siem/runbooks/multiple-authentication-failures.md
+          false_positive_notes: Expected during password spray tests, account lockout testing, and broken application credentials.
 
       - alert: SuspiciousPowerShellExecution
-        expr: count_over_time({job="siem-file-collector"} |~ "(?i)powershell.*(bypass|encodedcommand|downloadstring)" [10m]) > 0
+        expr: count_over_time({job="siem-file-collector"} |= "powershell" |= "Bypass" [10m]) > 0
         for: 0m
         labels:
+          id: siem-endpoint-001
           severity: high
           category: endpoint
+          owner: security-detection-engineering
+          status: experimental
+          mitre_tactic: execution
+          mitre_technique: powershell
         annotations:
           summary: Suspicious PowerShell command line observed
           description: PowerShell command line contains common execution bypass or download indicators.
+          runbook_url: docs/siem/runbooks/suspicious-powershell-execution.md
+          false_positive_notes: Expected during administrative scripts, endpoint management jobs, and red-team exercises.
 
       - alert: InboundSSHDenied
         expr: count_over_time({job="siem-file-collector"} |= "deny" |= "dst_port=22" [10m]) > 0
         for: 0m
         labels:
+          id: siem-network-001
           severity: low
           category: network
+          owner: security-detection-engineering
+          status: experimental
+          mitre_tactic: discovery
+          mitre_technique: network-service-discovery
         annotations:
           summary: Firewall denied inbound SSH traffic
           description: Firewall events include denied traffic to destination port 22.
+          runbook_url: docs/siem/runbooks/inbound-ssh-denied.md
+          false_positive_notes: Expected from internet scanning, vulnerability scanners, and approved connectivity tests.

@@ -118,5 +118,6 @@ More docs:
 - [Parser strategy](parser-strategy.md)
 - [Static lookups](lookups.md)
 - [Detections](detections.md)
+- [Detection lifecycle](detection-lifecycle.md)
 - [Production readiness](production-readiness.md)
 - [Production milestones](milestones.md)

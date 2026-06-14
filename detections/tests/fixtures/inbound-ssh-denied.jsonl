@@ -1,0 +1,1 @@
+{"source":"detection-test","detection_test":"siem-network-001","event.action":"connection","event.outcome":"deny","message":"firewall deny src_ip=198.51.100.25 dst_ip=10.0.1.20 dst_port=22 proto=tcp","source.ip":"198.51.100.25","destination.ip":"10.0.1.20","destination.port":22,"network.transport":"tcp"}

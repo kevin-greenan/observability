@@ -1,0 +1,18 @@
+tests:
+  - id: siem-auth-001
+    alert: MultipleAuthenticationFailures
+    fixture: detections/tests/fixtures/multiple-authentication-failures.jsonl
+    query: 'sum(count_over_time({job="siem-file-collector"} |= "$RUN_ID" |= "auth failure" [5m])) > 5'
+    expected: "siem-auth-001"
+
+  - id: siem-endpoint-001
+    alert: SuspiciousPowerShellExecution
+    fixture: detections/tests/fixtures/suspicious-powershell-execution.jsonl
+    query: 'count_over_time({job="siem-file-collector"} |= "$RUN_ID" |= "powershell" |= "Bypass" [10m]) > 0'
+    expected: "siem-endpoint-001"
+
+  - id: siem-network-001
+    alert: InboundSSHDenied
+    fixture: detections/tests/fixtures/inbound-ssh-denied.jsonl
+    query: 'count_over_time({job="siem-file-collector"} |= "$RUN_ID" |= "deny" |= "dst_port=22" [10m]) > 0'
+    expected: "siem-network-001"

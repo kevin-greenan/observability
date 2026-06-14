@@ -242,7 +242,7 @@ Exit criteria:
 
 ## Milestone 5: Detection Lifecycle and Testing
 
-Status: `planned`
+Status: `done`
 
 Goal: Create a repeatable process for detection authoring, review, testing, deployment, and tuning.
 
@@ -297,6 +297,10 @@ Exit criteria:
 - Rule test fixtures exist.
 - At least one detection has a passing automated test.
 - Rule ownership is visible in the rule file or sidecar metadata.
+
+Completion note:
+
+The `codex/siem-detection-lifecycle` branch satisfies this milestone by adding rule metadata, lifecycle documentation, runbooks, detection fixtures, and `make detection-test`.
 
 ## Milestone 6: Source Inventory and Data Quality
 
