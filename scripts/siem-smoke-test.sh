@@ -58,13 +58,13 @@ wait_for_query() {
 
 post_http_event() {
   local payload="$1"
+  local body=""
 
   for _ in $(seq 1 30); do
-    if docker run --rm --network lgtm-observability curlimages/curl:latest -fsS "${HTTP_EVENT_INTERNAL_URL}" \
+    if body="$(docker run --rm --network lgtm-observability curlimages/curl:latest -fsS "${HTTP_EVENT_INTERNAL_URL}" \
       -H "Authorization: Bearer ${HTTP_EVENT_TOKEN}" \
       -H "Content-Type: application/json" \
-      -d "${payload}" \
-      >/dev/null 2>&1; then
+      -d "${payload}" 2>&1)"; then
       return 0
     fi
     sleep 1
@@ -72,6 +72,7 @@ post_http_event() {
 
   echo "failed: HTTP event endpoint did not accept test event" >&2
   echo "url: ${HTTP_EVENT_INTERNAL_URL}" >&2
+  echo "last response: ${body}" >&2
   exit 1
 }
 
@@ -87,19 +88,22 @@ printf '{"source":"smoke","event.action":"file-json","message":"%s file json eve
 printf '%s,csv,login_failure,alice,203.0.113.10\n' "${RUN_ID}" \
   > "${SMOKE_DIR}/${RUN_ID}.csv"
 
-printf '%s logfmt event action=login outcome=failure user=bob src_ip=203.0.113.10\n' "${RUN_ID}" \
+printf '%s logfmt event action=login outcome=failure user=bob src_ip=203.0.113.10 dst_ip=10.0.1.20 dst_port=443 proto=tcp\n' "${RUN_ID}" \
   > "${SMOKE_DIR}/${RUN_ID}.log"
 
 SYSLOG_TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-printf '<34>1 %s smoke-host app - - - %s syslog event user=alice action=login outcome=failure\n' "${SYSLOG_TS}" "${RUN_ID}" \
+printf '<34>1 %s smoke-host app - - - %s syslog event user=alice action=login outcome=failure src_ip=203.0.113.10\n' "${SYSLOG_TS}" "${RUN_ID}" \
   > /dev/tcp/127.0.0.1/${SIEM_SYSLOG_TCP_PORT:-5514}
 
 wait_for_query "file JSON ingest" "{job=\"siem-file-collector\",source_type=\"file\"} |= \"${RUN_ID}\" |= \"file json\"" "${RUN_ID}"
 wait_for_query "CSV file ingest" "{job=\"siem-file-collector\",source_type=\"file\",parse_status=\"csv\"} |= \"${RUN_ID}\"" "fields"
 wait_for_query "key/value file ingest" "{job=\"siem-file-collector\",source_type=\"file\",parse_status=\"key_value\"} |= \"${RUN_ID}\"" "outcome"
+wait_for_query "key/value field normalization" "{job=\"siem-file-collector\",source_type=\"file\",parse_status=\"key_value\"} |= \"${RUN_ID}\"" "destination.port"
 wait_for_query "HTTP event ingest" "{job=\"siem-file-collector\",source_type=\"http_event_collector\"} |= \"${RUN_ID}\"" "http event"
+wait_for_query "JSON canonical field preservation" "{job=\"siem-file-collector\",source_type=\"http_event_collector\"} |= \"${RUN_ID}\"" "user.name"
 wait_for_query "source inventory enrichment" "{job=\"siem-file-collector\",source_id=\"http-event\"} |= \"${RUN_ID}\"" "source_owner"
 wait_for_query "lookup enrichment" "{job=\"siem-file-collector\",source_type=\"http_event_collector\"} |= \"${RUN_ID}\"" "asset_inventory"
 wait_for_query "syslog ingest" "{job=\"siem-file-collector\",source_type=\"syslog\"} |= \"${RUN_ID}\"" "syslog event"
+wait_for_query "syslog field normalization" "{job=\"siem-file-collector\",source_type=\"syslog\"} |= \"${RUN_ID}\"" "source.ip"
 
 echo "SIEM smoke test passed: ${RUN_ID}"

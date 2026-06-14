@@ -19,6 +19,12 @@ Every event should keep:
 | `siem.parse_status` | `json`, `csv`, `key_value`, or `raw` |
 | `siem.ingest_path` | Source file path |
 
+## Lightweight Normalization
+
+After automatic extraction, the collector adds canonical aliases for common fields when obvious source fields already exist. For example, `src_ip` becomes `source.ip`, `user` becomes `user.name`, and `cmd` becomes `process.command_line`.
+
+This is not a source-specific parser layer. It is a small compatibility layer for common security concepts that keeps `event.original` and the original fields intact. See [Field conventions](field-conventions.md).
+
 ## Automatic Extraction
 
 The default collector accepts files, syslog, and token-authenticated HTTP events. After ingest, it tries:

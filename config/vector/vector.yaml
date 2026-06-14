@@ -161,9 +161,157 @@ transforms:
         .siem.parse_status = "raw"
       }
 
+      .event = {}
+      .event.kind = "event"
+      .event.category = "security"
+      .event.original = raw
+
+      canonical_action = ""
+      if exists(.event_action) {
+        canonical_action = to_string(.event_action) ?? ""
+      }
+      if canonical_action == "" && exists(.action) {
+        canonical_action = to_string(.action) ?? ""
+      }
+      if canonical_action != "" {
+        . = merge(., {"event.action": canonical_action})
+      }
+
+      canonical_outcome = ""
+      if exists(.event_outcome) {
+        canonical_outcome = to_string(.event_outcome) ?? ""
+      }
+      if canonical_outcome == "" && exists(.outcome) {
+        canonical_outcome = to_string(.outcome) ?? ""
+      }
+      if canonical_outcome == "" && exists(.result) {
+        canonical_outcome = to_string(.result) ?? ""
+      }
+      if canonical_outcome != "" {
+        . = merge(., {"event.outcome": canonical_outcome})
+      }
+
+      canonical_user = ""
+      if exists(.user_name) {
+        canonical_user = to_string(.user_name) ?? ""
+      }
+      if canonical_user == "" && exists(.username) {
+        canonical_user = to_string(.username) ?? ""
+      }
+      if canonical_user == "" && exists(.user) {
+        canonical_user = to_string(.user) ?? ""
+      }
+      if canonical_user != "" {
+        . = merge(., {"user.name": canonical_user})
+      }
+
+      canonical_source_ip = ""
+      if exists(.source_ip) {
+        canonical_source_ip = to_string(.source_ip) ?? ""
+      }
+      if canonical_source_ip == "" && exists(.src_ip) {
+        canonical_source_ip = to_string(.src_ip) ?? ""
+      }
+      if canonical_source_ip == "" && exists(.client_ip) {
+        canonical_source_ip = to_string(.client_ip) ?? ""
+      }
+      if canonical_source_ip != "" {
+        . = merge(., {"source.ip": canonical_source_ip})
+      }
+
+      canonical_destination_ip = ""
+      if exists(.destination_ip) {
+        canonical_destination_ip = to_string(.destination_ip) ?? ""
+      }
+      if canonical_destination_ip == "" && exists(.dest_ip) {
+        canonical_destination_ip = to_string(.dest_ip) ?? ""
+      }
+      if canonical_destination_ip == "" && exists(.dst_ip) {
+        canonical_destination_ip = to_string(.dst_ip) ?? ""
+      }
+      if canonical_destination_ip != "" {
+        . = merge(., {"destination.ip": canonical_destination_ip})
+      }
+
+      canonical_destination_port = ""
+      if exists(.destination_port) {
+        canonical_destination_port = to_string(.destination_port) ?? ""
+      }
+      if canonical_destination_port == "" && exists(.dest_port) {
+        canonical_destination_port = to_string(.dest_port) ?? ""
+      }
+      if canonical_destination_port == "" && exists(.dst_port) {
+        canonical_destination_port = to_string(.dst_port) ?? ""
+      }
+      if canonical_destination_port != "" {
+        . = merge(., {"destination.port": canonical_destination_port})
+      }
+
+      canonical_host = ""
+      if exists(.host_name) {
+        canonical_host = to_string(.host_name) ?? ""
+      }
+      if canonical_host == "" && exists(.hostname) {
+        canonical_host = to_string(.hostname) ?? ""
+      }
+      if canonical_host == "" && exists(.host) {
+        canonical_host = to_string(.host) ?? ""
+      }
+      if canonical_host != "" {
+        . = merge(., {"host.name": canonical_host})
+      }
+
+      canonical_process = ""
+      if exists(.process_name) {
+        canonical_process = to_string(.process_name) ?? ""
+      }
+      if canonical_process == "" && exists(.process) {
+        canonical_process = to_string(.process) ?? ""
+      }
+      if canonical_process != "" {
+        . = merge(., {"process.name": canonical_process})
+      }
+
+      canonical_command_line = ""
+      if exists(.process_command_line) {
+        canonical_command_line = to_string(.process_command_line) ?? ""
+      }
+      if canonical_command_line == "" && exists(.command_line) {
+        canonical_command_line = to_string(.command_line) ?? ""
+      }
+      if canonical_command_line == "" && exists(.cmdline) {
+        canonical_command_line = to_string(.cmdline) ?? ""
+      }
+      if canonical_command_line == "" && exists(.cmd) {
+        canonical_command_line = to_string(.cmd) ?? ""
+      }
+      if canonical_command_line == "" && exists(.command) {
+        canonical_command_line = to_string(.command) ?? ""
+      }
+      if canonical_command_line != "" {
+        . = merge(., {"process.command_line": canonical_command_line})
+      }
+
+      canonical_transport = ""
+      if exists(.network_transport) {
+        canonical_transport = to_string(.network_transport) ?? ""
+      }
+      if canonical_transport == "" && exists(.transport) {
+        canonical_transport = to_string(.transport) ?? ""
+      }
+      if canonical_transport == "" && exists(.proto) {
+        canonical_transport = to_string(.proto) ?? ""
+      }
+      if canonical_transport == "" && exists(.protocol) {
+        canonical_transport = to_string(.protocol) ?? ""
+      }
+      if canonical_transport != "" {
+        . = merge(., {"network.transport": downcase(canonical_transport)})
+      }
+
       .source_type = source_type
 
-      candidate_ip = to_string(get!(., ["source.ip"])) ?? to_string(.source_ip) ?? to_string(.src_ip) ?? to_string(.source.ip) ?? ""
+      candidate_ip = to_string(get(., ["source.ip"]) ?? "") ?? ""
       if candidate_ip != "" {
         asset, asset_err = get_enrichment_table_record("asset_inventory", {"ip": candidate_ip})
         if asset_err == null {

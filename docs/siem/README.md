@@ -116,6 +116,7 @@ More docs:
 
 - [Data onboarding](onboarding.md)
 - [Parser strategy](parser-strategy.md)
+- [Field conventions](field-conventions.md)
 - [Static lookups](lookups.md)
 - [Source inventory](source-inventory.md)
 - [Detections](detections.md)

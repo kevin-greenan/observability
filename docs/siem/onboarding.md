@@ -63,6 +63,8 @@ The collector does not require source-specific parsers.
 
 This mirrors the useful part of search-first SIEM onboarding: collect first, search immediately, improve interpretation later.
 
+After generic parsing, the collector adds canonical aliases for common analyst fields such as `event.action`, `event.outcome`, `user.name`, `source.ip`, `destination.ip`, `host.name`, `process.name`, and `process.command_line`. See [Field conventions](field-conventions.md).
+
 ## Production Pattern
 
 For real sources, keep data outside the repository and point `.env` at that path:

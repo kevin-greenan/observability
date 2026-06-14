@@ -370,7 +370,7 @@ The `codex/siem-source-inventory` branch satisfies this milestone by adding `con
 
 ## Milestone 7: Normalization Standard
 
-Status: `planned`
+Status: `done`
 
 Goal: Define a lightweight field convention that improves search and detection without creating parser maintenance debt.
 
@@ -415,6 +415,10 @@ Exit criteria:
 - Common fields are documented.
 - Normalization behavior is covered by smoke or fixture tests.
 - Parser strategy remains raw-first.
+
+Completion note:
+
+The `codex/siem-normalization-standard` branch satisfies this milestone by adding `docs/siem/field-conventions.md`, lightweight canonical aliasing in Vector, smoke-test coverage for normalized fields, and parser/onboarding documentation that keeps source-specific parsing as an exception.
 
 ## Milestone 8: Production Deployment Target
 
