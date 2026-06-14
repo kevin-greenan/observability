@@ -123,6 +123,8 @@ More docs:
 - [Detection lifecycle](detection-lifecycle.md)
 - [Alert routing](alert-routing.md)
 - [Security model](security-model.md)
+- [Identity and RBAC](identity-rbac.md)
+- [Secrets](secrets.md)
 - [Production architecture](production-architecture.md)
 - [Production readiness](production-readiness.md)
 - [Production milestones](milestones.md)

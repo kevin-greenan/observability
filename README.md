@@ -26,7 +26,7 @@ Default credentials:
 - Username: `admin`
 - Password: `admin`
 
-Change `GRAFANA_ADMIN_PASSWORD` in `.env` before using this outside a local workstation.
+These credentials are local lab placeholders only. Change `GRAFANA_ADMIN_PASSWORD` before using this outside a local workstation, and use SSO plus managed secrets before handling production security data.
 
 By default, service ports bind to `127.0.0.1`. For a production-like SIEM boundary, use the optional TLS edge proxy profile and review [docs/siem/security-model.md](docs/siem/security-model.md).
 
@@ -88,6 +88,7 @@ make validate    # validate docker-compose.yml
 make siem-smoke-test # verify SIEM ingest paths after startup
 make detection-test # verify SIEM detection fixtures after startup
 make security-boundary-test # verify optional TLS edge proxy path
+make identity-secrets-test # verify SIEM identity/RBAC and secrets docs
 make down        # stop containers and keep volumes
 make clean       # stop containers and remove volumes
 ```

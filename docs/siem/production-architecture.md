@@ -9,6 +9,7 @@ For this milestone, the selected pattern is:
 - Docker Compose single-host runtime.
 - Backend APIs bound to loopback by default.
 - Optional Caddy TLS edge proxy for Grafana and HTTP event ingest.
+- SSO and managed secrets required before production security data.
 - Syslog exposed only when the host firewall restricts sender networks.
 - Direct Loki, Mimir, Tempo, Prometheus, Alloy, and Vector diagnostic access kept private.
 
@@ -56,4 +57,3 @@ Before using this with sensitive production security data, complete the later mi
 - Upgrade and release management.
 - Capacity and load testing.
 - Auditability.
-

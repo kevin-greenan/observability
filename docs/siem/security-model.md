@@ -5,8 +5,11 @@ This stack supports a local lab by default and a production-like single-host bou
 - Expose only the TLS edge proxy, approved syslog listener, and any explicitly approved OTLP ingest ports.
 - Keep Loki, Mimir, Tempo, Prometheus, Alloy, Vector diagnostics, and collector metrics bound to loopback or private networks.
 - Terminate TLS before Grafana and HTTP event ingest.
+- Use SSO and role-based access for Grafana before handling production data.
 - Require a bearer token for HTTP event ingest.
 - Restrict syslog senders with host firewall rules or upstream network controls.
+
+See [Identity and RBAC](identity-rbac.md) and [Secrets](secrets.md) for access and secret handling requirements.
 
 ## Trust Zones
 
@@ -107,4 +110,3 @@ docker compose up -d --force-recreate siem-collector
 7. Record the rotation date, owner, and reason in the change ticket or PR.
 
 For zero-downtime rotation, run a temporary parallel collector endpoint or sender-side dual-write period. The current single-token Vector configuration intentionally keeps the pilot setup simple.
-
