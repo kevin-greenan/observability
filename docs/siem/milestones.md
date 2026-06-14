@@ -304,7 +304,7 @@ The `codex/siem-detection-lifecycle` branch satisfies this milestone by adding r
 
 ## Milestone 6: Source Inventory and Data Quality
 
-Status: `planned`
+Status: `done`
 
 Goal: Track onboarded data sources, expected behavior, and data quality signals.
 
@@ -363,6 +363,10 @@ Exit criteria:
 - At least one source is represented.
 - Dashboard shows source freshness and parser status.
 - Stale-source rule exists for critical sources.
+
+Completion note:
+
+The `codex/siem-source-inventory` branch satisfies this milestone by adding `config/vector/lookups/sources.csv`, source inventory enrichment, the `source_id` Loki label, data-quality dashboard panels, source inventory documentation, smoke-test coverage, and a starter stale-source alert.
 
 ## Milestone 7: Normalization Standard
 
