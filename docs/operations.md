@@ -35,6 +35,12 @@ Validate the SIEM identity/RBAC and secret-handling documentation:
 make identity-secrets-test
 ```
 
+Validate the config backup and restore drill:
+
+```bash
+make restore-test
+```
+
 ## Security Boundary Test
 
 To verify the optional TLS edge proxy path:

@@ -160,7 +160,7 @@ The `codex/siem-identity-secrets` branch satisfies this milestone by adding iden
 
 ## Milestone 3: Durable Storage, Retention, and Backup
 
-Status: `planned`
+Status: `done`
 
 Goal: Make event storage durable, sized, and recoverable.
 
@@ -202,6 +202,10 @@ Exit criteria:
 - Retention policy is documented.
 - Storage backend migration path is documented.
 - Restore procedure has been tested in a clean environment.
+
+Completion note:
+
+The `codex/siem-storage-retention-backup` branch satisfies this milestone by adding capacity planning, retention policy, backup/restore procedures, object-storage migration examples, restore-drill automation, and dashboard panels for SIEM ingest bytes and collector ingest rate.
 
 ## Milestone 4: Alert Routing and Incident Workflow
 
