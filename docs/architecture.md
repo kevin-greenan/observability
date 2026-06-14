@@ -11,6 +11,7 @@ flowchart LR
   syslog["Syslog TCP/UDP"] --> vector
   hec["HTTP Event Collector"] --> vector
   vector --> loki
+  vector --> prometheus
   alloy --> loki["Loki"]
   prometheus["Prometheus"] --> mimir["Mimir"]
   telemetrygen["Telemetrygen"] --> tempo["Tempo"]
@@ -46,6 +47,8 @@ Runtime configuration is split by component under `config/`.
 - `config/prometheus/prometheus.yaml` scrapes stack metrics and remote-writes them to Mimir.
 - `config/alloy/config.alloy` discovers Docker containers and forwards logs to Loki.
 - `config/vector/vector.yaml` watches the SIEM ingest drop zone and forwards events to Loki.
+- `detections/loki/security-rules.yaml` is mounted into Loki's local ruler path.
+- `dashboards/grafana/siem-overview.json` is provisioned into Grafana.
 
 ## Local-Only Assumptions
 

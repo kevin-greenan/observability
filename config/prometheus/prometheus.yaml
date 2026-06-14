@@ -38,3 +38,8 @@ scrape_configs:
     static_configs:
       - targets:
           - alloy:12345
+
+  - job_name: siem-collector
+    static_configs:
+      - targets:
+          - siem-collector:9598

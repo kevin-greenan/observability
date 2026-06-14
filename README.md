@@ -41,6 +41,7 @@ Change `GRAFANA_ADMIN_PASSWORD` in `.env` before using this outside a local work
 | Prometheus | http://localhost:9090 | Local scraper and remote write source |
 | Alloy | http://localhost:12345 | Collector UI and diagnostics |
 | SIEM Collector | http://localhost:8686 | File-based security event collector diagnostics |
+| SIEM Collector Metrics | http://localhost:9598 | Collector Prometheus metrics |
 | SIEM HTTP Event Collector | http://localhost:8088 | Token-authenticated HTTP event ingestion |
 | SIEM Syslog | localhost:5514 | TCP/UDP syslog ingestion |
 
@@ -60,8 +61,11 @@ Change `GRAFANA_ADMIN_PASSWORD` in `.env` before using this outside a local work
 │   ├── tempo/
 │   └── vector/
 ├── detections/
+├── dashboards/
+│   └── grafana/
 ├── examples/
-│   └── ingest/
+│   ├── ingest/
+│   └── sources/
 ├── docs/
 │   ├── architecture.md
 │   ├── operations.md
@@ -78,6 +82,7 @@ make up          # start the stack
 make ps          # show service status
 make logs        # follow logs from all services
 make validate    # validate docker-compose.yml
+make siem-smoke-test # verify SIEM ingest paths after startup
 make down        # stop containers and keep volumes
 make clean       # stop containers and remove volumes
 ```

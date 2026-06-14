@@ -20,6 +20,9 @@ enrichment_tables:
       criticality: string
 
 sources:
+  internal_metrics:
+    type: internal_metrics
+
   siem_files:
     type: file
     include:
@@ -141,6 +144,12 @@ transforms:
       }
 
 sinks:
+  prometheus_metrics:
+    type: prometheus_exporter
+    inputs:
+      - internal_metrics
+    address: 0.0.0.0:9598
+
   loki:
     type: loki
     inputs:

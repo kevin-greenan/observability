@@ -5,6 +5,10 @@
 tmp/
 data/
 
+# Local SIEM ingest data
+ingest/*
+!ingest/README.md
+
 # Editor metadata
 .idea/
 .vscode/

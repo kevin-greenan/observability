@@ -3,7 +3,7 @@ groups:
     interval: 1m
     rules:
       - alert: MultipleAuthenticationFailures
-        expr: sum by (user_name, source_ip) (count_over_time({job="siem-file-collector"} |= "failure" [5m])) > 5
+        expr: sum(count_over_time({job="siem-file-collector"} |= "failure" [5m])) > 5
         for: 2m
         labels:
           severity: medium
