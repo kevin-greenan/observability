@@ -1,0 +1,10 @@
+.env
+.DS_Store
+
+# Local scratch output
+tmp/
+data/
+
+# Editor metadata
+.idea/
+.vscode/
