@@ -92,7 +92,8 @@ The test harness validates required rule metadata, sends fixture events, and que
 5. Add or update the runbook.
 6. Merge as `experimental`.
 7. Tune during pilot use.
-8. Promote to `production` only after alert routing and response ownership are tested.
+8. Run `make alert-routing-test` when routing configuration changes.
+9. Promote to `production` only after alert routing and response ownership are tested.
 
 ## Rollback
 
@@ -102,4 +103,3 @@ If a rule is noisy or broken:
 2. Restart Loki or reload the stack so the mounted rule file is refreshed.
 3. Record the reason in the PR or issue.
 4. Keep fixture coverage for the corrected behavior.
-
