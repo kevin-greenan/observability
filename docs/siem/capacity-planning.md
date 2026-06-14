@@ -38,6 +38,8 @@ The SIEM Overview dashboard includes:
 
 - `SIEM Ingest Bytes by Source`: LogQL `bytes_over_time` estimate by `source_id`.
 - `SIEM Collector Ingest Rate`: Vector source receive rate from Prometheus/Mimir.
+- `Loki Request Latency p95`: backend query/request latency.
+- `Vector Sink Errors`: collector delivery errors to downstream sinks.
 
 Watch these with:
 
@@ -47,6 +49,12 @@ sum by (source_id) (bytes_over_time({job="siem-file-collector", source_id!=""}[1
 
 ```promql
 sum(rate(vector_component_received_events_total{component_id=~"siem_.*"}[5m]))
+```
+
+Run a synthetic load test before increasing expected source volume:
+
+```bash
+make siem-load-test
 ```
 
 ## Sizing Thresholds
@@ -71,4 +79,3 @@ Move Loki, Mimir, and Tempo data to durable object storage when any are true:
 - Multiple analysts depend on historical search.
 - Compliance requires evidence retention.
 - The deployment target moves beyond a lab or small pilot.
-

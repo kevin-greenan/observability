@@ -87,6 +87,7 @@ make logs        # follow logs from all services
 make validate    # validate docker-compose.yml
 make validate-all # run full static validation for releases/upgrades
 make siem-smoke-test # verify SIEM ingest paths after startup
+make siem-load-test # run synthetic SIEM HTTP ingest load test
 make detection-test # verify SIEM detection fixtures after startup
 make security-boundary-test # verify optional TLS edge proxy path
 make identity-secrets-test # verify SIEM identity/RBAC and secrets docs

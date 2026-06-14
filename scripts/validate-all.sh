@@ -73,6 +73,7 @@ echo "validating repository guardrails"
 if [[ "${VALIDATE_ALL_LIVE:-0}" == "1" ]]; then
   echo "running live validation"
   ./scripts/siem-smoke-test.sh
+  SIEM_LOAD_TEST_EVENTS="${SIEM_LOAD_TEST_EVENTS:-100}" SIEM_LOAD_TEST_TARGET_EPS="${SIEM_LOAD_TEST_TARGET_EPS:-50}" ./scripts/siem-load-test.sh
   ./scripts/detection-test.sh
   ./scripts/alert-routing-test.sh
   ./scripts/security-boundary-test.sh

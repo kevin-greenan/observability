@@ -528,7 +528,7 @@ The `codex/siem-upgrade-release-management` branch satisfies this milestone by a
 
 ## Milestone 10: Capacity and Load Testing
 
-Status: `planned`
+Status: `done`
 
 Goal: Measure ingestion and query behavior under expected security event load.
 
@@ -567,6 +567,10 @@ Exit criteria:
 - Load-test script exists.
 - Baseline capacity numbers are documented.
 - Known limits are documented.
+
+Completion note:
+
+The `codex/siem-capacity-load-testing` branch satisfies this milestone by adding `make siem-load-test`, load-testing documentation, JSON run output, live validation coverage, and SIEM Overview panels for Loki p95 request latency and Vector sink errors.
 
 ## Milestone 11: Auditability
 
