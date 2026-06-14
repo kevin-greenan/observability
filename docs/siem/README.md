@@ -121,5 +121,6 @@ More docs:
 - [Source inventory](source-inventory.md)
 - [Detections](detections.md)
 - [Detection lifecycle](detection-lifecycle.md)
+- [Alert routing](alert-routing.md)
 - [Production readiness](production-readiness.md)
 - [Production milestones](milestones.md)

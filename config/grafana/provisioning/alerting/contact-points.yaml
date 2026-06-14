@@ -1,0 +1,14 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: siem-local-webhook
+    receivers:
+      - uid: siem-local-webhook
+        type: webhook
+        settings:
+          url: http://host.docker.internal:18080/siem-alerts
+          httpMethod: POST
+          title: '{{ template "siem.alert_title" . }}'
+          message: '{{ template "siem.alert_message" . }}'
+        disableResolveMessage: false

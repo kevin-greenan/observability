@@ -197,7 +197,7 @@ Exit criteria:
 
 ## Milestone 4: Alert Routing and Incident Workflow
 
-Status: `planned`
+Status: `done`
 
 Goal: Turn detections into actionable, routed alerts with ownership and response instructions.
 
@@ -239,6 +239,10 @@ Exit criteria:
 - Alert delivery has been tested.
 - Severity routing is documented.
 - Alert tuning workflow is documented.
+
+Completion note:
+
+The `codex/siem-alert-routing` branch satisfies this milestone by adding Grafana alerting provisioning, a local webhook contact point, severity/category notification policies, reusable alert templates, alert routing documentation, tuning workflow guidance, and `make alert-routing-test`.
 
 ## Milestone 5: Detection Lifecycle and Testing
 

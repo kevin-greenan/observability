@@ -1,4 +1,4 @@
-.PHONY: up down restart logs ps validate siem-smoke-test detection-test clean
+.PHONY: up down restart logs ps validate siem-smoke-test detection-test alert-routing-test clean
 
 COMPOSE ?= docker compose
 
@@ -25,6 +25,9 @@ siem-smoke-test:
 
 detection-test:
 	./scripts/detection-test.sh
+
+alert-routing-test:
+	./scripts/alert-routing-test.sh
 
 clean:
 	$(COMPOSE) down --volumes --remove-orphans
