@@ -1,0 +1,2 @@
+ts=2026-06-14T00:01:00Z action=allow src_ip=10.0.1.25 dst_ip=10.0.2.10 dst_port=443 proto=tcp device=fw01
+ts=2026-06-14T00:01:05Z action=deny src_ip=203.0.113.44 dst_ip=10.0.1.20 dst_port=22 proto=tcp device=fw01

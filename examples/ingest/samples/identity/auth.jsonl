@@ -1,0 +1,2 @@
+{"timestamp":"2026-06-14T00:00:00Z","event.action":"login","event.outcome":"failure","user.name":"alice","source.ip":"203.0.113.10","service.name":"vpn","message":"failed vpn login"}
+{"timestamp":"2026-06-14T00:00:03Z","event.action":"login","event.outcome":"success","user.name":"alice","source.ip":"198.51.100.12","service.name":"vpn","message":"successful vpn login"}

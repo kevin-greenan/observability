@@ -1,0 +1,38 @@
+# Detections
+
+Detection examples live in `detections/loki/security-rules.yaml`.
+
+They are intentionally simple and raw-event friendly. A detection should not require a custom parser unless it is worth maintaining.
+
+## Example Queries
+
+Authentication failures:
+
+```logql
+{job="siem-file-collector"} |= "failure"
+```
+
+Suspicious PowerShell:
+
+```logql
+{job="siem-file-collector"} |~ "(?i)powershell.*(bypass|encodedcommand|downloadstring)"
+```
+
+Denied SSH:
+
+```logql
+{job="siem-file-collector"} |= "deny" |= "dst_port=22"
+```
+
+## Promotion Path
+
+1. Start with search queries in Grafana Explore.
+2. Convert useful searches into dashboard panels.
+3. Convert high-signal searches into Loki alert rules.
+4. Only add parser logic when multiple detections need the same extracted fields.
+
+## Rule Loading
+
+The rule file is provided as a starting point. This repository does not yet mount it into Loki automatically because alert routing and notification policy are environment-specific.
+
+When you are ready to wire alerting, mount `detections/loki/` into Loki's ruler directory and configure Grafana alert notifications.

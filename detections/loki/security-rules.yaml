@@ -1,0 +1,33 @@
+groups:
+  - name: siem-baseline
+    interval: 1m
+    rules:
+      - alert: MultipleAuthenticationFailures
+        expr: sum by (user_name, source_ip) (count_over_time({job="siem-file-collector"} |= "failure" [5m])) > 5
+        for: 2m
+        labels:
+          severity: medium
+          category: identity
+        annotations:
+          summary: Multiple authentication failures observed
+          description: More than five failure events were seen for the same user/source pair in five minutes.
+
+      - alert: SuspiciousPowerShellExecution
+        expr: count_over_time({job="siem-file-collector"} |~ "(?i)powershell.*(bypass|encodedcommand|downloadstring)" [10m]) > 0
+        for: 0m
+        labels:
+          severity: high
+          category: endpoint
+        annotations:
+          summary: Suspicious PowerShell command line observed
+          description: PowerShell command line contains common execution bypass or download indicators.
+
+      - alert: InboundSSHDenied
+        expr: count_over_time({job="siem-file-collector"} |= "deny" |= "dst_port=22" [10m]) > 0
+        for: 0m
+        labels:
+          severity: low
+          category: network
+        annotations:
+          summary: Firewall denied inbound SSH traffic
+          description: Firewall events include denied traffic to destination port 22.

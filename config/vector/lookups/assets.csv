@@ -1,0 +1,4 @@
+ip,asset_name,owner,environment,criticality
+10.0.1.25,workstation-01,endpoint-team,lab,medium
+10.0.1.20,linux-server-01,platform-team,lab,high
+203.0.113.10,example-external-vpn-source,security-team,test,low

@@ -91,6 +91,37 @@ docker compose logs prometheus
 
 Open Prometheus at http://localhost:9090 and check **Status > Targets**.
 
+### No SIEM Events in Loki
+
+Check the collector and confirm the ingest directory is mounted:
+
+```bash
+docker compose logs siem-collector
+```
+
+Then query Loki:
+
+```logql
+{job="siem-file-collector"}
+```
+
+For production data, set `SIEM_INGEST_DIR` in `.env` to a directory outside the repository.
+
+For HTTP collector ingest, confirm the token and endpoint:
+
+```bash
+curl -s http://localhost:8088/event \
+  -H 'Authorization: Bearer change-me' \
+  -H 'Content-Type: application/json' \
+  -d '{"event":"siem collector test"}'
+```
+
+For syslog ingest, confirm the host ports are mapped:
+
+```bash
+docker compose ps siem-collector
+```
+
 ### No Traces in Tempo
 
 Check the trace generator and Tempo distributor logs:
@@ -112,6 +143,7 @@ TEMPO_VERSION=<tested-version>
 MIMIR_VERSION=<tested-version>
 PROMETHEUS_VERSION=<tested-version>
 ALLOY_VERSION=<tested-version>
+VECTOR_VERSION=<tested-version>
 ```
 
 Run `make validate` and restart the stack after changing tags.

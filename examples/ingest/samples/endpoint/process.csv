@@ -1,0 +1,2 @@
+timestamp,host,user,process,parent_process,command_line
+2026-06-14T00:02:00Z,workstation-01,bob,powershell.exe,explorer.exe,"powershell.exe -NoProfile -ExecutionPolicy Bypass"

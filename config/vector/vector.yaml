@@ -1,0 +1,156 @@
+api:
+  enabled: true
+  address: 0.0.0.0:8686
+
+data_dir: /var/lib/vector
+
+enrichment_tables:
+  asset_inventory:
+    type: file
+    file:
+      path: /etc/vector/lookups/assets.csv
+      encoding:
+        type: csv
+        include_headers: true
+    schema:
+      ip: string
+      asset_name: string
+      owner: string
+      environment: string
+      criticality: string
+
+sources:
+  siem_files:
+    type: file
+    include:
+      - /var/lib/siem/ingest/**/*.log
+      - /var/lib/siem/ingest/**/*.json
+      - /var/lib/siem/ingest/**/*.jsonl
+      - /var/lib/siem/ingest/**/*.csv
+      - /var/lib/siem/ingest/**/*.txt
+    read_from: beginning
+    fingerprint:
+      strategy: device_and_inode
+
+  siem_syslog_tcp:
+    type: syslog
+    address: 0.0.0.0:5514
+    mode: tcp
+    max_length: 102400
+
+  siem_syslog_udp:
+    type: syslog
+    address: 0.0.0.0:5514
+    mode: udp
+    max_length: 102400
+
+  siem_http_event_collector:
+    type: http_server
+    address: 0.0.0.0:8088
+    method: POST
+    path: /
+    strict_path: false
+    auth:
+      strategy: custom
+      source: '.headers.authorization == "Bearer ${SIEM_HTTP_EVENT_TOKEN}"'
+    decoding:
+      codec: json
+
+transforms:
+  siem_normalize:
+    type: remap
+    inputs:
+      - siem_files
+      - siem_syslog_tcp
+      - siem_syslog_udp
+      - siem_http_event_collector
+    source: |
+      source_type = to_string(.source_type) ?? "unknown"
+      if source_type == "http_server" {
+        source_type = "http_event_collector"
+      }
+
+      raw = if exists(.message) {
+        to_string(.message) ?? encode_json(.message)
+      } else if exists(.event) {
+        encode_json(.event)
+      } else {
+        encode_json(.)
+      }
+      path = to_string(.file) ?? "unknown"
+
+      .message = raw
+      .event = {}
+      .event.kind = "event"
+      .event.category = "security"
+      .event.original = raw
+
+      .observer = {}
+      .observer.type = "siem-file-collector"
+      .observer.vendor = "local"
+
+      .siem = {}
+      .siem.source_type = source_type
+      .siem.ingest_path = path
+      .siem.parser_mode = "raw-first"
+      .siem.schema_version = "1"
+
+      parsed_json, json_err = parse_json(raw)
+      if json_err == null && is_object(parsed_json) {
+        . = merge!(., parsed_json)
+        .siem.parse_status = "json"
+      } else if ends_with(path, ".csv") {
+        parsed_csv, csv_err = parse_csv(raw)
+        if csv_err == null && is_array(parsed_csv) {
+          .csv = {}
+          .csv.fields = parsed_csv
+          .siem.parse_status = "csv"
+        } else {
+          .siem.parse_status = "raw"
+        }
+      } else if contains(raw, "=") {
+        parsed_kv, kv_err = parse_key_value(raw)
+        if kv_err == null && is_object(parsed_kv) {
+          . = merge(., parsed_kv)
+          .siem.parse_status = "key_value"
+        } else {
+          .siem.parse_status = "raw"
+        }
+      } else {
+        .siem.parse_status = "raw"
+      }
+
+      .source_type = source_type
+
+      candidate_ip = to_string(get!(., ["source.ip"])) ?? to_string(.source_ip) ?? to_string(.src_ip) ?? to_string(.source.ip) ?? ""
+      if candidate_ip != "" {
+        asset, asset_err = get_enrichment_table_record("asset_inventory", {"ip": candidate_ip})
+        if asset_err == null {
+          .asset = {}
+          .asset.ip = candidate_ip
+          .asset.name = asset.asset_name
+          .asset.owner = asset.owner
+          .asset.environment = asset.environment
+          .asset.criticality = asset.criticality
+          .siem.enrichment_status = "asset_inventory"
+        } else {
+          .siem.enrichment_status = "none"
+        }
+      } else {
+        .siem.enrichment_status = "none"
+      }
+
+sinks:
+  loki:
+    type: loki
+    inputs:
+      - siem_normalize
+    endpoint: http://loki:3100
+    healthcheck:
+      enabled: false
+    encoding:
+      codec: json
+    labels:
+      job: siem-file-collector
+      source_type: "{{ siem.source_type }}"
+      parse_status: "{{ siem.parse_status }}"
