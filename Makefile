@@ -1,4 +1,4 @@
-.PHONY: up down restart logs ps validate clean
+.PHONY: up down restart logs ps validate siem-smoke-test clean
 
 COMPOSE ?= docker compose
 
@@ -19,6 +19,9 @@ ps:
 
 validate:
 	./scripts/validate.sh
+
+siem-smoke-test:
+	./scripts/siem-smoke-test.sh
 
 clean:
 	$(COMPOSE) down --volumes --remove-orphans

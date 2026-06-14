@@ -91,8 +91,7 @@ Send RFC3164 or RFC5424 syslog to the collector:
 Local smoke-test example:
 
 ```bash
-docker run --rm --network lgtm-observability busybox sh -c \
-  "printf '<13>Jun 14 00:00:00 lab-host vpn: login failed user=alice src_ip=203.0.113.10\n' | nc lgtm-siem-collector 5514"
+bash -c 'printf "<34>1 %s lab-host vpn - - - login failed user=alice src_ip=203.0.113.10\n" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > /dev/tcp/127.0.0.1/5514'
 ```
 
 For appliances, point the device's syslog destination at the host running Docker and port `5514`. If you need privileged port `514`, map host port `514` to container port `5514` in `.env` or Compose after deciding how you want to handle host-level permissions.
@@ -142,6 +141,7 @@ Query HTTP collector events:
 | Environment variable | Default | Purpose |
 | --- | --- | --- |
 | `SIEM_COLLECTOR_HTTP_PORT` | `8686` | Vector diagnostics API |
+| `SIEM_COLLECTOR_METRICS_PORT` | `9598` | Vector Prometheus metrics |
 | `SIEM_HTTP_EVENT_PORT` | `8088` | Token-authenticated HTTP event ingest |
 | `SIEM_SYSLOG_TCP_PORT` | `5514` | Syslog over TCP |
 | `SIEM_SYSLOG_UDP_PORT` | `5514` | Syslog over UDP |

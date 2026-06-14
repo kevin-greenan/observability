@@ -33,6 +33,6 @@ Denied SSH:
 
 ## Rule Loading
 
-The rule file is provided as a starting point. This repository does not yet mount it into Loki automatically because alert routing and notification policy are environment-specific.
+The rule file is mounted into Loki at `/loki/rules/fake/security-rules.yaml`.
 
-When you are ready to wire alerting, mount `detections/loki/` into Loki's ruler directory and configure Grafana alert notifications.
+Grafana alert contact points and notification policies are still environment-specific. Configure them before relying on these rules operationally.

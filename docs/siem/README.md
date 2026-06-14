@@ -18,7 +18,9 @@ This is a SIEM framework and local lab foundation, not a complete enterprise SIE
 - A collector that accepts mixed event formats over files, syslog, and token-authenticated HTTP.
 - A simple event envelope for source metadata.
 - Static lookup enrichment for reference data like asset inventory.
-- Detection examples that run against raw events.
+- Mounted detection examples that run against raw events.
+- A provisioned SIEM overview dashboard.
+- A repeatable smoke test for core ingestion paths.
 - Documentation for adding sources without creating long-lived parsers.
 
 ## Core Principle
@@ -61,8 +63,7 @@ The event is labeled internally as `source_type="http_event_collector"`.
 Syslog example:
 
 ```bash
-docker run --rm --network lgtm-observability busybox sh -c \
-  "printf '<13>Jun 14 00:00:00 lab-host app: hello from syslog user=alice action=login\n' | nc lgtm-siem-collector 5514"
+bash -c 'printf "<34>1 %s lab-host app - - - hello from syslog user=alice action=login\n" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > /dev/tcp/127.0.0.1/5514'
 ```
 
 ## Explore
@@ -117,3 +118,4 @@ More docs:
 - [Parser strategy](parser-strategy.md)
 - [Static lookups](lookups.md)
 - [Detections](detections.md)
+- [Production readiness](production-readiness.md)

@@ -29,6 +29,16 @@ make validate
 
 The validation script runs `docker compose config --quiet`.
 
+## SIEM Smoke Test
+
+After the stack is running, verify file, CSV, key/value, HTTP, syslog, and lookup-enriched ingest:
+
+```bash
+make siem-smoke-test
+```
+
+The script writes temporary events under the configured SIEM ingest directory, sends one HTTP event through the Compose network, sends one RFC5424 syslog event, and queries Loki until each path is observed. It requires Docker because it uses a short-lived curl container for internal service checks.
+
 ## Query Examples
 
 ### Logs
@@ -120,6 +130,12 @@ For syslog ingest, confirm the host ports are mapped:
 
 ```bash
 docker compose ps siem-collector
+```
+
+For collector metrics, query Mimir or Prometheus:
+
+```promql
+up{job="siem-collector"}
 ```
 
 ### No Traces in Tempo
