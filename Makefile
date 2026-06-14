@@ -1,4 +1,4 @@
-.PHONY: up down restart logs ps validate validate-all siem-smoke-test siem-load-test detection-test alert-routing-test security-boundary-test identity-secrets-test restore-test production-deployment-test clean
+.PHONY: up down restart logs ps validate validate-all siem-smoke-test siem-load-test detection-test alert-routing-test security-boundary-test identity-secrets-test restore-test production-deployment-test auditability-test clean
 
 COMPOSE ?= docker compose
 
@@ -46,6 +46,9 @@ restore-test:
 
 production-deployment-test:
 	./scripts/production-deployment-test.sh
+
+auditability-test:
+	./scripts/auditability-test.sh
 
 clean:
 	$(COMPOSE) down --volumes --remove-orphans

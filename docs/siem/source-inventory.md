@@ -82,3 +82,5 @@ docker compose restart siem-collector
 ```
 
 For production, keep source ownership metadata in source control if it does not reveal sensitive infrastructure. If it does, mount a private inventory file into `/etc/vector/lookups/sources.csv`.
+
+Use the source onboarding PR checklist for new production or high-criticality sources so source owner approval, expected volume, freshness targets, parser expectations, and rollback evidence are recorded with the change.

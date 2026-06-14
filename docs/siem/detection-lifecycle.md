@@ -47,6 +47,7 @@ Before merging a detection change:
 - The rule can match raw events without requiring a fragile parser.
 - Representative fixture events exist under `detections/tests/fixtures/`.
 - `make detection-test` passes.
+- The detection PR checklist captures ownership, evidence, and rollback.
 
 ## Test Fixtures
 
