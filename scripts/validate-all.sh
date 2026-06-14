@@ -66,6 +66,7 @@ docker run --rm \
   -config.file=/etc/loki/loki.yaml -verify-config=true
 
 echo "validating repository guardrails"
+./scripts/docs-structure-test.sh
 ./scripts/identity-secrets-test.sh
 ./scripts/production-deployment-test.sh
 ./scripts/restore-test.sh

@@ -1,6 +1,6 @@
 # Production Readiness
 
-This stack is suitable for a local lab and a small security-team pilot. Treat it as a starting point before production use.
+This stack is suitable for a local lab and a small security-team pilot. Treat it as a production-pilot foundation, not a highly available enterprise SIEM.
 
 ## Ready for Pilot
 
@@ -49,6 +49,7 @@ This stack is suitable for a local lab and a small security-team pilot. Treat it
 - Keep lookup files versioned only when they do not contain sensitive inventory.
 - Use private mounts or a secret manager for sensitive enrichment data.
 - Run `make validate` and `make siem-smoke-test` before merging SIEM changes.
+- Run `make validate-all` before release, upgrade, production deployment, or governance changes.
 
 ## Operational SLOs
 
@@ -75,4 +76,3 @@ Recommended pilot targets:
 - [ ] `make siem-smoke-test` passes.
 - [ ] At least one real source onboarded and searchable.
 - [ ] Analyst workflow tested in Grafana Explore and SIEM Overview.
-

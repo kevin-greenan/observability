@@ -9,7 +9,7 @@ Docker Compose stack for local logging, metrics, and tracing with the Grafana LG
 
 The stack also includes Prometheus for local scraping and remote write, Grafana Alloy for Docker log collection, a small log generator, and an OpenTelemetry trace generator so the environment has sample telemetry after startup.
 
-It also includes a starter SIEM framework with raw-first security event onboarding. See [docs/siem/README.md](docs/siem/README.md).
+It also includes a SIEM framework with raw-first security event onboarding. Start with the [documentation index](docs/README.md) or the [SIEM framework guide](docs/siem/README.md).
 
 ## Quick Start
 
@@ -52,30 +52,19 @@ By default, service ports bind to `127.0.0.1`. For a production-like SIEM bounda
 
 ```text
 .
+├── .github/          # PR templates for SIEM changes
+├── config/           # Service runtime configuration
+├── dashboards/       # Provisioned Grafana dashboards
+├── deploy/           # Deployment overlays and operator examples
+├── detections/       # Detection rules, tests, and fixtures
+├── docs/             # Documentation index, operations, and SIEM guides
+├── examples/         # Sample ingest data and source onboarding examples
+├── ingest/           # Local file-drop ingest directory
+├── scripts/          # Validation and test helpers
+├── secrets/          # Local secret-file mount point documentation
 ├── docker-compose.yml
 ├── .env.example
-├── Makefile
-├── config/
-│   ├── alloy/
-│   ├── grafana/
-│   ├── loki/
-│   ├── mimir/
-│   ├── prometheus/
-│   ├── tempo/
-│   └── vector/
-├── detections/
-├── dashboards/
-│   └── grafana/
-├── examples/
-│   ├── ingest/
-│   └── sources/
-├── docs/
-│   ├── architecture.md
-│   ├── operations.md
-│   └── siem/
-├── ingest/
-└── scripts/
-    └── validate.sh
+└── Makefile
 ```
 
 ## Common Commands
@@ -86,6 +75,7 @@ make ps          # show service status
 make logs        # follow logs from all services
 make validate    # validate docker-compose.yml
 make validate-all # run full static validation for releases/upgrades
+make docs-structure-test # verify documentation organization
 make siem-smoke-test # verify SIEM ingest paths after startup
 make siem-load-test # run synthetic SIEM HTTP ingest load test
 make detection-test # verify SIEM detection fixtures after startup

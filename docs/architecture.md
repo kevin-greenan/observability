@@ -9,7 +9,7 @@ flowchart LR
   docker["Docker containers"] --> alloy["Grafana Alloy"]
   files["SIEM file drop"] --> vector["Vector SIEM collector"]
   syslog["Syslog TCP/UDP"] --> vector
-  hec["HTTP Event Collector"] --> vector
+  http["HTTP Event Collector"] --> vector
   vector --> loki
   vector --> prometheus
   alloy --> loki["Loki"]
