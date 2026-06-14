@@ -85,6 +85,7 @@ make up          # start the stack
 make ps          # show service status
 make logs        # follow logs from all services
 make validate    # validate docker-compose.yml
+make validate-all # run full static validation for releases/upgrades
 make siem-smoke-test # verify SIEM ingest paths after startup
 make detection-test # verify SIEM detection fixtures after startup
 make security-boundary-test # verify optional TLS edge proxy path

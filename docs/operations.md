@@ -47,6 +47,18 @@ Validate the selected production deployment target:
 make production-deployment-test
 ```
 
+Run full static validation before upgrade or release changes:
+
+```bash
+make validate-all
+```
+
+Run live validation against a started stack:
+
+```bash
+VALIDATE_ALL_LIVE=1 make validate-all
+```
+
 ## Security Boundary Test
 
 To verify the optional TLS edge proxy path:
