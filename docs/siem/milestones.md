@@ -194,7 +194,7 @@ Scope:
 - Incident escalation workflow for high-severity cases.
 - Evidence retention and immutable audit trail.
 - Case search and reporting.
-- Integration with external ticketing or SOAR if used.
+- Integration with external ticketing, ITSM, SOAR, paging, and collaboration tools when those are the operational systems of record.
 - Analyst workflow documentation.
 
 Candidate implementation:
@@ -207,6 +207,7 @@ Candidate implementation:
 - Add deployment configuration for the selected case-management component.
 - Add alert webhook or API integration to create/update cases.
 - Add dashboard links from alerts to cases.
+- Add outbound links from cases to Jira, ServiceNow, PagerDuty, Slack, Teams, email threads, or SOAR records when those systems are used.
 - Add case lifecycle validation or smoke test.
 
 Open decisions:
@@ -214,6 +215,7 @@ Open decisions:
 - Whether cases should live in Grafana, a dedicated incident-response platform, or an external ticketing system.
 - Whether case notes and evidence are stored in the SIEM environment or a separate system of record.
 - Whether every alert creates a case or only analyst-promoted alerts do.
+- Whether external Jira/ServiceNow/PagerDuty records mirror every case or only escalated incidents.
 
 Exit criteria:
 
@@ -222,9 +224,56 @@ Exit criteria:
 - Case lifecycle states are defined.
 - Case data is backed up and included in restore drills.
 - Case actions are auditable.
+- External tool links are preserved with case evidence.
 - Analysts can search, assign, update, escalate, and close cases.
 
-## Milestone 7: Detection Engineering at Production Scale
+## Milestone 7: SOC Tool Integrations
+
+Status: `planned`
+
+Goal: Provide supported integration paths for enterprise SOC-adjacent tools without rebuilding ticketing, paging, chat, email, or ITSM platforms inside this repository.
+
+Why this matters:
+
+Security teams rarely operate from one product. A production SIEM must fit the surrounding workflow: Jira tasks, ServiceNow incidents, Slack or Teams channels, email distribution lists, PagerDuty or Opsgenie on-call, SOAR playbooks, and evidence systems.
+
+Scope:
+
+- Outbound alert notification destinations: Slack, Microsoft Teams, email, PagerDuty, Opsgenie, generic webhook, and HTTP API.
+- Ticket and incident creation: Jira issue, ServiceNow incident, external SOAR case, or another approved case/ticket system.
+- Bidirectional references between SIEM cases and external records.
+- Integration ownership, credential storage, retry behavior, and failure visibility.
+- Payload templates for severity, source, rule ID, entities, runbook, dashboard link, case link, and deduplication key.
+- Integration test procedure using non-production endpoints.
+- Rate limiting and noise controls to avoid overwhelming downstream tools.
+
+Candidate implementation:
+
+- Add `docs/siem/integrations.md`.
+- Extend Grafana contact point examples for Slack, Teams, email, PagerDuty, and generic webhook.
+- Add a generic outbound webhook contract for ticket/case automation.
+- Document Jira and ServiceNow payload examples without requiring either platform.
+- Add secret-manager requirements for integration credentials.
+- Add `make integration-contract-test` to validate sample payloads and required fields.
+- Add integration health checks or dashboard panels for delivery failures.
+
+Open decisions:
+
+- Whether Grafana contact points are sufficient for notifications or whether a routing/orchestration layer is needed.
+- Whether Jira/ServiceNow creation should happen directly from alerts, from cases, or from analyst action.
+- Which external system is the incident system of record when an on-platform case also exists.
+- Whether integrations should be synchronous, queued, or retried through an intermediate worker.
+
+Exit criteria:
+
+- Supported integration patterns are documented.
+- Slack/Teams/email/PagerDuty-style notifications have tested configuration examples or templates.
+- Jira/ServiceNow-style ticket creation has a documented webhook/API contract.
+- Integration credentials are handled through managed secrets.
+- Delivery failures are visible to platform owners.
+- SIEM cases preserve links to external tasks, incidents, chats, and pages.
+
+## Milestone 8: Detection Engineering at Production Scale
 
 Status: `planned`
 
@@ -259,7 +308,7 @@ Exit criteria:
 - Detection tests run automatically.
 - Alert quality is measured and reviewed.
 
-## Milestone 8: Data Source Coverage and Ingest Governance
+## Milestone 9: Data Source Coverage and Ingest Governance
 
 Status: `planned`
 
@@ -294,7 +343,7 @@ Exit criteria:
 - Onboarding approval workflow is documented.
 - Source health is visible to analysts and platform owners.
 
-## Milestone 9: Compliance, Privacy, and Data Governance
+## Milestone 10: Compliance, Privacy, and Data Governance
 
 Status: `planned`
 
@@ -328,7 +377,7 @@ Exit criteria:
 - Evidence export and legal hold procedures exist.
 - Retention is technically enforced or tracked as an explicit external control.
 
-## Milestone 10: Production Auditability and Administrative Audit Logs
+## Milestone 11: Production Auditability and Administrative Audit Logs
 
 Status: `planned`
 
@@ -342,6 +391,7 @@ Scope:
 
 - Grafana Enterprise/Cloud audit log decision or equivalent external audit strategy.
 - Case-management audit logs.
+- Integration configuration and delivery audit logs.
 - Rule and dashboard changes through Git.
 - Lookup update records.
 - Source onboarding approvals.
@@ -352,6 +402,7 @@ Candidate implementation:
 
 - Extend `docs/siem/auditability.md`.
 - Add audit log collection for Grafana and the case system.
+- Add audit coverage for integration credential changes, routing changes, and failed delivery handling.
 - Add dashboards or queries for administrative activity.
 - Add audit evidence retention requirements.
 
@@ -359,10 +410,11 @@ Exit criteria:
 
 - Administrative audit source is selected and onboarded.
 - Case-management actions are auditable.
+- Integration routing and delivery changes are auditable.
 - Change evidence is retained.
 - Access and token events can be reviewed.
 
-## Milestone 11: CI/CD, Release Management, and Change Gates
+## Milestone 12: CI/CD, Release Management, and Change Gates
 
 Status: `planned`
 
@@ -396,7 +448,7 @@ Exit criteria:
 - Production promotion has approvals and rollback steps.
 - Dependency and image risk is visible.
 
-## Milestone 12: Disaster Recovery and Business Continuity
+## Milestone 13: Disaster Recovery and Business Continuity
 
 Status: `planned`
 
@@ -428,7 +480,7 @@ Exit criteria:
 - Backups are monitored.
 - Case data is included in DR testing.
 
-## Milestone 13: Analyst Experience and Investigation Workflow
+## Milestone 14: Analyst Experience and Investigation Workflow
 
 Status: `planned`
 
@@ -468,12 +520,13 @@ Exit criteria:
 3. Managed secrets and identity integration.
 4. Platform monitoring and SLOs.
 5. On-platform case and incident management.
-6. Data source coverage and ingest governance.
-7. Detection engineering at production scale.
-8. Production auditability and administrative audit logs.
-9. CI/CD, release management, and change gates.
-10. Disaster recovery and business continuity.
-11. Compliance, privacy, and data governance.
-12. Analyst experience and investigation workflow.
+6. SOC tool integrations.
+7. Data source coverage and ingest governance.
+8. Detection engineering at production scale.
+9. Production auditability and administrative audit logs.
+10. CI/CD, release management, and change gates.
+11. Disaster recovery and business continuity.
+12. Compliance, privacy, and data governance.
+13. Analyst experience and investigation workflow.
 
-The order intentionally puts runtime, identity, secrets, and storage before deep analyst workflow work. Case management is early because it becomes the system of record for response work and must be included in backup, RBAC, audit, and operational monitoring decisions.
+The order intentionally puts runtime, identity, secrets, and storage before deep analyst workflow work. Case management and SOC tool integrations are early because they become the system of record and handoff paths for response work, and must be included in backup, RBAC, audit, notification, and operational monitoring decisions.
