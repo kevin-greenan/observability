@@ -126,5 +126,8 @@ More docs:
 - [Identity and RBAC](identity-rbac.md)
 - [Secrets](secrets.md)
 - [Production architecture](production-architecture.md)
+- [Capacity planning](capacity-planning.md)
+- [Backup and restore](backup-restore.md)
+- [Storage backends](storage-backends.md)
 - [Production readiness](production-readiness.md)
 - [Production milestones](milestones.md)
