@@ -273,7 +273,57 @@ Exit criteria:
 - Delivery failures are visible to platform owners.
 - SIEM cases preserve links to external tasks, incidents, chats, and pages.
 
-## Milestone 8: Detection Engineering at Production Scale
+## Milestone 8: Consolidated Administrative API
+
+Status: `planned`
+
+Goal: Provide a single modern administrative API for managing SIEM platform configuration and orchestrating changes across stack components.
+
+Why this matters:
+
+Loki, Grafana, Mimir, Tempo, Vector, and supporting services each expose their own APIs or file-based configuration patterns. Administrators should not need to script every backend differently for common platform operations. A consolidated API can become the supported control plane for safe, auditable changes while still delegating to the native component APIs underneath.
+
+Scope:
+
+- Modern API framework with OpenAPI/Swagger documentation, such as FastAPI.
+- Authentication, authorization, and role-based scopes for administrative actions.
+- CRUD workflows for managed configuration: sources, lookups, detection metadata, routing destinations, case integrations, dashboards, retention profiles, and deployment settings.
+- Safe orchestration over native APIs and Git-backed configuration.
+- Change preview, validation, apply, rollback, and status tracking.
+- Audit log for every API action, including actor, request, affected resource, validation result, and rollback reference.
+- Versioned API contracts and client examples.
+- Guardrails for dangerous operations such as deleting sources, changing retention, rotating tokens, or disabling alerts.
+
+Candidate implementation:
+
+- Add `services/admin-api/` with a FastAPI service.
+- Add `docs/siem/admin-api.md`.
+- Add OpenAPI schema generation and Swagger UI.
+- Add typed resource models for sources, lookups, detections, alert routes, integrations, cases, and platform settings.
+- Add adapters for Grafana, Loki ruler files, Vector configuration/lookups, deployment configuration, and future case-management APIs.
+- Add dry-run validation that calls existing repository checks before applying changes.
+- Add `make admin-api-test` for contract tests, authorization checks, and sample API workflows.
+- Add Docker Compose wiring for local development and a production deployment pattern.
+
+Open decisions:
+
+- Whether the API writes directly to backend component APIs, writes Git changes for review, or supports both modes.
+- Whether all production changes require pull-request approval, or whether some low-risk changes can be applied live by authorized users.
+- Whether the API owns configuration state or acts as an orchestrator over Git and native component state.
+- How long to retain API audit records and where to store them.
+- Which resources are allowed in the first production version.
+
+Exit criteria:
+
+- Administrative API service exists with OpenAPI/Swagger documentation.
+- Authentication and authorization are enforced.
+- API can perform at least one complete safe workflow, such as onboarding a source or updating a lookup through validate/apply/status steps.
+- API actions are audited.
+- Dangerous operations have explicit guardrails.
+- API contract tests run in validation.
+- Documentation explains supported resources, unsupported operations, rollback behavior, and native component API boundaries.
+
+## Milestone 9: Detection Engineering at Production Scale
 
 Status: `planned`
 
@@ -308,7 +358,7 @@ Exit criteria:
 - Detection tests run automatically.
 - Alert quality is measured and reviewed.
 
-## Milestone 9: Data Source Coverage and Ingest Governance
+## Milestone 10: Data Source Coverage and Ingest Governance
 
 Status: `planned`
 
@@ -343,7 +393,7 @@ Exit criteria:
 - Onboarding approval workflow is documented.
 - Source health is visible to analysts and platform owners.
 
-## Milestone 10: Compliance, Privacy, and Data Governance
+## Milestone 11: Compliance, Privacy, and Data Governance
 
 Status: `planned`
 
@@ -377,7 +427,7 @@ Exit criteria:
 - Evidence export and legal hold procedures exist.
 - Retention is technically enforced or tracked as an explicit external control.
 
-## Milestone 11: Production Auditability and Administrative Audit Logs
+## Milestone 12: Production Auditability and Administrative Audit Logs
 
 Status: `planned`
 
@@ -392,6 +442,7 @@ Scope:
 - Grafana Enterprise/Cloud audit log decision or equivalent external audit strategy.
 - Case-management audit logs.
 - Integration configuration and delivery audit logs.
+- Administrative API audit logs.
 - Rule and dashboard changes through Git.
 - Lookup update records.
 - Source onboarding approvals.
@@ -402,7 +453,7 @@ Candidate implementation:
 
 - Extend `docs/siem/auditability.md`.
 - Add audit log collection for Grafana and the case system.
-- Add audit coverage for integration credential changes, routing changes, and failed delivery handling.
+- Add audit coverage for integration credential changes, routing changes, administrative API actions, and failed delivery handling.
 - Add dashboards or queries for administrative activity.
 - Add audit evidence retention requirements.
 
@@ -410,11 +461,11 @@ Exit criteria:
 
 - Administrative audit source is selected and onboarded.
 - Case-management actions are auditable.
-- Integration routing and delivery changes are auditable.
+- Integration routing, administrative API actions, and delivery changes are auditable.
 - Change evidence is retained.
 - Access and token events can be reviewed.
 
-## Milestone 12: CI/CD, Release Management, and Change Gates
+## Milestone 13: CI/CD, Release Management, and Change Gates
 
 Status: `planned`
 
@@ -448,7 +499,7 @@ Exit criteria:
 - Production promotion has approvals and rollback steps.
 - Dependency and image risk is visible.
 
-## Milestone 13: Disaster Recovery and Business Continuity
+## Milestone 14: Disaster Recovery and Business Continuity
 
 Status: `planned`
 
@@ -461,7 +512,7 @@ Security operations must continue during incidents, outages, and failed upgrades
 Scope:
 
 - Recovery time objective and recovery point objective.
-- Restore drills for logs, metrics, traces, dashboards, detections, lookups, and cases.
+- Restore drills for logs, metrics, traces, dashboards, detections, lookups, administrative API state, and cases.
 - Backup integrity checks.
 - Alternate access path during Grafana or case-system outage.
 - Communications plan for SIEM degradation.
@@ -480,7 +531,7 @@ Exit criteria:
 - Backups are monitored.
 - Case data is included in DR testing.
 
-## Milestone 14: Analyst Experience and Investigation Workflow
+## Milestone 15: Analyst Experience and Investigation Workflow
 
 Status: `planned`
 
@@ -521,12 +572,13 @@ Exit criteria:
 4. Platform monitoring and SLOs.
 5. On-platform case and incident management.
 6. SOC tool integrations.
-7. Data source coverage and ingest governance.
-8. Detection engineering at production scale.
-9. Production auditability and administrative audit logs.
-10. CI/CD, release management, and change gates.
-11. Disaster recovery and business continuity.
-12. Compliance, privacy, and data governance.
-13. Analyst experience and investigation workflow.
+7. Consolidated administrative API.
+8. Data source coverage and ingest governance.
+9. Detection engineering at production scale.
+10. Production auditability and administrative audit logs.
+11. CI/CD, release management, and change gates.
+12. Disaster recovery and business continuity.
+13. Compliance, privacy, and data governance.
+14. Analyst experience and investigation workflow.
 
-The order intentionally puts runtime, identity, secrets, and storage before deep analyst workflow work. Case management and SOC tool integrations are early because they become the system of record and handoff paths for response work, and must be included in backup, RBAC, audit, notification, and operational monitoring decisions.
+The order intentionally puts runtime, identity, secrets, and storage before deep analyst workflow work. Case management, SOC tool integrations, and the consolidated administrative API are early because they become the system of record, handoff paths, and control plane for response work, and must be included in backup, RBAC, audit, notification, and operational monitoring decisions.
