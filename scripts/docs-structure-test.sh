@@ -33,14 +33,10 @@ require_absent_text() {
   rm -f /tmp/docs-structure-test.matches
 }
 
-if [[ -f docs/siem/milestones.md ]]; then
-  echo "docs/siem/milestones.md should not exist after initial milestone completion" >&2
-  exit 1
-fi
-
 require_file README.md
 require_file docs/README.md
 require_file docs/siem/README.md
+require_file docs/siem/milestones.md
 require_file docs/siem/runbooks/README.md
 require_file config/README.md
 require_file dashboards/README.md
@@ -53,8 +49,10 @@ require_text README.md "detections/"
 require_text docs/README.md "SIEM Framework"
 require_text docs/siem/README.md "Operational workflows"
 require_text docs/siem/README.md "Production and governance"
+require_text docs/siem/milestones.md "On-Platform Case and Incident Management"
+require_text docs/siem/milestones.md "fully production-ready security platform"
 require_text docs/siem/runbooks/README.md "Current Runbooks"
 
-require_absent_text "milestones\\.md|Production milestones|initial milestones" README.md docs .github
+require_absent_text "initial milestones|codex/siem-" README.md docs .github
 
 echo "docs-structure-test passed"
